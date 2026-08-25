@@ -87,7 +87,6 @@ llama.cpp / vLLM / Ollama、Anthropic・Gemini の API、MCP、NVIDIA・AMD、SQ
 |---|---|
 | [PatentLLM](https://patentllm.org) | 特許検索 |
 | [HanreiLLM](https://hanrei2.patentllm.org) | 判例検索 |
-| [HoureiLLM](https://hourei.patentllm.org) | 法令を意味で引く — 全法令24万条をベクトルと全文の両方で |
 | [SubsidyDB](https://subsidy.patentllm.org) | 補助金データベース |
 
 ---
