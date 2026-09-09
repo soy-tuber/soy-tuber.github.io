@@ -114,6 +114,50 @@ AIコーディングの語彙を平易な言葉に翻訳した辞典。
 
 ---
 
+## Case Law
+
+判例・裁判例を分野や利用場面から引くためのページと、個別論点の検証メモ。
+
+### [破棄判例に学ぶ — 最高裁の考え方](https://claude.ai/code/artifact/68e398d6-b34e-4243-9e9f-2b553114609d)
+
+最高裁の破棄判例を**破棄事由**と**分野**から引く。
+
+### [音楽フェスと著作権](https://claude.ai/code/artifact/364f8be4-c24e-4cd9-95f3-7160b58a454f)
+
+著作権・商標の裁判例を**利用シーン**から引く。
+
+### [商法536条3項の任意規定性 — 判例DB検証](https://claude.ai/code/artifact/cef3ab48-4067-456d-82f1-4471c5afd24c)
+
+匿名組合・審級チェーンの検証メモ。
+
+### [飲食店 店舗賃貸借の判例争点](https://claude.ai/code/artifact/99bde091-38b8-4dd2-b036-842b1bee3310)
+
+借地借家法の争点整理。
+
+### [株式等に対する差押命令申立書の審査](https://claude.ai/code/artifact/20592641-5612-4434-b0b9-b73fdbc09f32)
+
+振替株式・株券不発行株式の執行事務と関連判例（マニュアル補遺）。
+
+関連: [司法試験租税法まとめノート](https://soy-tuber.github.io/taxlaw-notes/)（References）
+
+---
+
+## Chemical Regulation
+
+### [化学物質 法規制 横断検索](https://hanrei2.patentllm.org/chemical/)
+
+特化則・有機則・安衛法・毒劇法・PRTR を1検索で横断。**全77,707物質**、裾切り値と GHS つき。
+
+### [SDS AI判定](https://dsdssearch.patentllm.org/)
+
+SDS を読み込ませて法規制の該当を判定（要ログイン）。
+
+### [触媒カタログ](https://catalyst.patentllm.org/)
+
+遷移金属触媒・有機分子触媒 **179件**を反応から引く。構造式・GHS・実測収率・結晶構造つき。
+
+---
+
 ## Daily
 
 ### [media.patentllm.org](https://media.patentllm.org/)
