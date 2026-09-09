@@ -1,0 +1,1664 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Copilot &amp; ChatGPT 実務活用ハンドブック（汎用）</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Jost:wght@500;700;800&family=Archivo:wght@500;600;700&display=swap">
+<style>
+/* ============================================================
+   tokens.css 準拠
+   原典トークンは一切変更していない。
+   投影用に --t-s-* の6つだけを「追加」している。
+   ============================================================ */
+:root {
+  --c-ink:     #000000;
+  --c-body:    #1F1F1F;
+  --c-mute:    #6E7478;
+  --c-line:    #CBD0D3;
+  --c-surface: #E5EBEE;
+  --c-paper:   #FFFFFF;
+
+  --c-ground:      #000000;
+  --c-ground-ink:  #FFFFFF;
+  --c-ground-mute: #9BA1A5;
+  --c-ground-line: #4A4A4A;
+  --c-cool:        #89B2C9;
+  --c-cool-ink:    #000000;
+  --c-cool-mute:   #28414E;
+
+  --c-accent:     #FDD108;
+  --c-accent-ink: #000000;
+
+  --c-blue:  #376AB3;
+  --c-red:   #E73656;
+  --c-sky:   #51A5DC;
+  --c-green: #92C9A7;
+  --c-teal:  #A2D7D4;
+  --c-lime:  #D8E58D;
+
+  --c-ok:    #2E7D5B;
+  --c-warn:  #B26A00;
+  --c-error: #C4102F;
+
+  --f-sans: "Noto Sans JP", -apple-system, "Hiragino Kaku Gothic ProN", "Yu Gothic", Meiryo, sans-serif;
+  --f-disp: "Jost", "Noto Sans JP", sans-serif;
+  --f-num:  "Archivo", "Noto Sans JP", Arial, sans-serif;
+  --f-mono: "SFMono-Regular", Menlo, Consolas, "Liberation Mono", "Noto Sans Mono", monospace;
+
+  --t-hero:    3.500rem;
+  --t-display: 2.000rem;
+  --t-h1:      1.500rem;
+  --t-h2:      1.125rem;
+  --t-h3:      0.9375rem;
+  --t-body:    0.9375rem;
+  --t-small:   0.8125rem;
+  --t-label:   0.6875rem;
+
+  /* ---- 追加：投影用の段（screen tier）------------------- */
+  --t-s-hero:  4.500rem;
+  --t-s-title: 2.250rem;
+  --t-s-h2:    1.500rem;
+  --t-s-body:  1.0625rem;
+  --t-s-small: 0.875rem;
+  --t-s-label: 0.750rem;
+
+  --lh-body:  1.85;
+  --lh-head:  1.40;
+  --lh-tight: 1.05;
+  --ls-head:  0.02em;
+  --ls-label: 0.18em;
+  --ls-disp:  0.06em;
+
+  --s-1: 4px;  --s-2: 8px;  --s-3: 12px; --s-4: 16px;
+  --s-5: 24px; --s-6: 32px; --s-7: 48px; --s-8: 64px;
+
+  --r-0: 0;
+  --r-1: 3px;
+  --r-3: 14px;
+  --r-pill: 999px;
+
+  --bd:       1px solid var(--c-line);
+  --bd-ink:   1px solid var(--c-ink);
+  --rule-dot: 1px dotted var(--c-ink);
+  --sh-overlay: 0 2px 12px rgba(0, 0, 0, 0.16);
+}
+
+html { font-size: 16px; }
+body {
+  margin: 0;
+  background: var(--c-surface);
+  color: var(--c-body);
+  font-family: var(--f-sans);
+  font-size: var(--t-body);
+  line-height: var(--lh-body);
+  font-feature-settings: "palt" 1;
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3 { color: var(--c-ink); line-height: var(--lh-head); letter-spacing: var(--ls-head); margin: 0; }
+code { font-family: var(--f-mono); }
+
+.label {
+  font-family: var(--f-disp);
+  font-size: var(--t-s-label); font-weight: 700;
+  letter-spacing: var(--ls-label); text-transform: uppercase;
+  color: var(--c-mute);
+}
+.display {
+  font-family: var(--f-disp); font-weight: 800;
+  letter-spacing: var(--ls-disp); text-transform: uppercase;
+  color: var(--c-ink); line-height: var(--lh-tight);
+}
+.band {
+  display: inline-block;
+  background: var(--c-accent); color: var(--c-accent-ink);
+  font-weight: 900; font-size: var(--t-s-h2); line-height: 1.5;
+  padding: var(--s-1) var(--s-3); border-radius: var(--r-1);
+}
+.band-ink {
+  display: inline-block;
+  background: var(--c-ink); color: var(--c-ground-ink);
+  font-weight: 700; font-size: var(--t-s-body); line-height: 1.5;
+  padding: var(--s-1) var(--s-3); border-radius: var(--r-1);
+}
+.chip {
+  display: inline-block;
+  background: var(--c-ink); color: var(--c-ground-ink);
+  font-family: var(--f-disp);
+  font-size: var(--t-s-label); font-weight: 700; letter-spacing: 0.08em;
+  padding: 3px var(--s-2); border-radius: var(--r-1);
+  white-space: nowrap;
+}
+.chip-accent { background: var(--c-accent); color: var(--c-accent-ink); }
+.num-badge {
+  display: inline-flex; align-items: center; justify-content: center;
+  flex: none; width: 28px; height: 28px; border-radius: var(--r-pill);
+  background: var(--c-ink); color: var(--c-ground-ink);
+  font-family: var(--f-num); font-size: var(--t-s-small); font-weight: 700;
+}
+.bubble {
+  position: relative; background: var(--c-paper);
+  border: var(--bd-ink); border-radius: var(--r-3);
+  padding: var(--s-4) var(--s-5);
+}
+/* 最下段に置く吹き出し。矢印が9px下に出る分、上下の余白を1段落とす */
+.bubble-tight { padding: var(--s-3) var(--s-5); }
+.bubble::after {
+  content: ""; position: absolute; left: var(--s-6); bottom: -9px;
+  width: 16px; height: 9px; background: inherit;
+  border-right: var(--bd-ink); border-bottom: var(--bd-ink);
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+}
+.mark { background: linear-gradient(transparent 62%, var(--c-accent) 62%); }
+.panel      { background: var(--c-surface); padding: var(--s-5); border-radius: var(--r-3); }
+.panel-ink  { background: var(--c-ground); color: var(--c-ground-ink); padding: var(--s-5); border-radius: var(--r-3); }
+.panel-ink h2, .panel-ink h3 { color: var(--c-ground-ink); }
+.panel-cool { background: var(--c-cool); color: var(--c-cool-ink); padding: var(--s-5); border-radius: var(--r-3); }
+.card { background: var(--c-paper); border: var(--bd); border-radius: var(--r-3); padding: var(--s-5); }
+.card-tight { padding: var(--s-4); }
+.num { font-family: var(--f-num); font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
+.stat {
+  font-family: var(--f-num); font-variant-numeric: tabular-nums;
+  font-size: var(--t-s-hero); font-weight: 700; line-height: var(--lh-tight);
+  color: var(--c-ink); letter-spacing: -0.02em;
+}
+.stat-unit { font-family: var(--f-sans); font-size: var(--t-s-body); font-weight: 700; margin-left: 2px; }
+
+table { border-collapse: collapse; width: 100%; font-size: var(--t-s-small); }
+th {
+  text-align: left; color: var(--c-mute); font-weight: 700;
+  font-family: var(--f-disp);
+  font-size: var(--t-s-label); letter-spacing: 0.08em; text-transform: uppercase;
+  padding: var(--s-2) var(--s-3); border-bottom: var(--bd-ink);
+}
+td { padding: var(--s-3); border-bottom: var(--rule-dot); color: var(--c-body); vertical-align: top; line-height: 1.7; }
+.table-lead {
+  background: var(--c-ink); color: var(--c-ground-ink);
+  font-weight: 700; font-size: var(--t-s-small);
+  border-bottom: 1px solid var(--c-paper); white-space: nowrap;
+}
+.t-compact td, .t-compact th { padding: var(--s-2) var(--s-3); }
+.t-compact td { line-height: 1.6; }
+.t-prompt td { font-family: var(--f-mono); }
+.t-prompt td.table-lead, .t-prompt td.plain { font-family: var(--f-sans); }
+
+/* ============================================================
+   デッキ：1280x720 固定キャンバス
+   ============================================================ */
+.stage {
+  position: fixed; left: 0; right: 0; top: 0; bottom: 0;
+  display: grid; place-items: center;
+  overflow: hidden; background: var(--c-surface);
+}
+.slide {
+  width: 1280px; height: 720px; flex: none;
+  box-sizing: border-box; padding: 52px 72px 52px;
+  background: var(--c-paper); color: var(--c-body);
+  display: flex; flex-direction: column; gap: var(--s-4);
+  transform: scale(var(--k, 1)); transform-origin: center center;
+  position: relative; overflow: hidden;
+}
+.slide[hidden] { display: none; }
+.slide.ink { background: var(--c-ground); color: var(--c-ground-mute); }
+.slide.ink h1, .slide.ink h2, .slide.ink h3, .slide.ink .display { color: var(--c-ground-ink); }
+.slide.ink .label { color: var(--c-ground-mute); }
+.slide.ink .chip { background: var(--c-paper); color: var(--c-ink); }
+
+.s-head { display: flex; flex-direction: column; gap: var(--s-3); }
+.eyebrow { display: flex; align-items: center; gap: var(--s-3); }
+.s-title { font-size: var(--t-s-title); font-weight: 900; color: var(--c-ink); text-wrap: balance; line-height: 1.3; }
+.s-lead { font-size: var(--t-s-body); color: var(--c-body); max-width: 62em; }
+.s-body { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: var(--s-4); font-size: var(--t-s-body); }
+.pageno {
+  position: absolute; right: 72px; bottom: 26px;
+  font-family: var(--f-num); font-variant-numeric: tabular-nums;
+  font-size: var(--t-s-label); font-weight: 600; color: var(--c-mute);
+}
+.slide.ink .pageno { color: var(--c-ground-mute); }
+.footline {
+  position: absolute; left: 72px; bottom: 26px;
+  font-family: var(--f-disp); font-size: var(--t-s-label); font-weight: 700;
+  letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--c-line);
+}
+.slide.ink .footline { color: var(--c-ground-line); }
+
+.prompt {
+  background: var(--c-surface); border-radius: var(--r-3);
+  padding: var(--s-4) var(--s-5);
+  font-family: var(--f-mono); font-size: var(--t-s-small);
+  line-height: 1.75; color: var(--c-body);
+  white-space: pre-wrap; overflow-wrap: anywhere;
+}
+.prompt-mini {
+  background: var(--c-surface); border-radius: var(--r-3);
+  padding: var(--s-3) var(--s-4);
+  font-family: var(--f-mono); font-size: var(--t-s-small);
+  line-height: 1.7; color: var(--c-body);
+  white-space: pre-wrap; overflow-wrap: anywhere;
+}
+.prompt-lean { padding-top: var(--s-3); padding-bottom: var(--s-3); }
+/* 長いプロンプト全文を1枚に収めるとき。原文は改変せず行送りだけ詰める */
+.prompt-dense { line-height: 1.6; }
+.prompt-set { display: flex; flex-direction: column; gap: var(--s-3); }
+.prompt-set > .chip { align-self: flex-start; }
+.slide.ink .prompt, .slide.ink .prompt-mini {
+  background: transparent; border: 1px solid var(--c-ground-line); color: var(--c-ground-ink);
+}
+.cat .prompt-mini, .accent-card .prompt-mini { background: var(--c-paper); }
+
+.cols-2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-6); align-items: start; }
+.cols-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s-5); align-items: start; }
+.cols-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--s-4); align-items: stretch; }
+.split { display: grid; grid-template-columns: 1.15fr 1fr; gap: var(--s-7); align-items: start; }
+.split-r { display: grid; grid-template-columns: 1fr 1.15fr; gap: var(--s-7); align-items: start; }
+
+.steps { display: flex; flex-direction: column; gap: 0; }
+.step { display: flex; gap: var(--s-4); padding: var(--s-4) 0; border-bottom: var(--rule-dot); }
+.step:last-child { border-bottom: 0; }
+.steps-tight .step { padding: var(--s-3) 0; }
+.step-t { font-weight: 700; color: var(--c-ink); font-size: var(--t-s-body); }
+.step-d { font-size: var(--t-s-small); color: var(--c-body); line-height: 1.8; }
+
+.cat { border-radius: var(--r-3); padding: var(--s-4); color: var(--c-ink); display: flex; flex-direction: column; gap: var(--s-2); }
+.cat h3 { font-size: var(--t-s-h2); font-weight: 900; }
+.cat p { margin: 0; font-size: var(--t-s-small); line-height: 1.75; }
+.cat .label { color: var(--c-cool-mute); }
+.cat-a { background: var(--c-sky); }
+.cat-b { background: var(--c-teal); }
+.cat-c { background: var(--c-lime); }
+.cat-d { background: var(--c-cool); }
+
+.ticks { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--s-3); }
+.ticks li { display: flex; gap: var(--s-3); font-size: var(--t-s-body); line-height: 1.75; }
+.ticks li::before { content: "\2014"; color: var(--c-mute); flex: none; }
+.tight { gap: var(--s-2); }
+.tight li { font-size: var(--t-s-small); }
+.slide.ink .ticks li { color: var(--c-ground-ink); }
+.slide.ink .ticks li::before { color: var(--c-ground-mute); }
+
+.accent-card { background: var(--c-accent); border-color: var(--c-accent); }
+
+/* ============================================================
+   セクション識別色
+   Copilot = 水色（--c-cool・面色）／ChatGPT = 淡緑（--c-green）
+   いずれも tokens.css の既存値。上に乗せる文字は黒（原典の指定どおり）。
+   Appendix は指定によりモノクロ（data-sec を付けない）。
+   ============================================================ */
+.slide[data-sec="copilot"] { --c-sec: var(--c-cool); }
+.slide[data-sec="chatgpt"] { --c-sec: var(--c-green); }
+.slide[data-sec]::before {
+  content: ""; position: absolute; left: 0; top: 0; bottom: 0;
+  width: 10px; background: var(--c-sec);
+}
+.slide[data-sec] .s-head .chip { background: var(--c-sec); color: var(--c-ink); }
+.slide.ink[data-sec] .chip { background: var(--c-sec); color: var(--c-ink); }
+/* 章見出しの帯をセクション色に差し替える版（.band-ink と同寸法） */
+.band-sec {
+  display: inline-block;
+  background: var(--c-sec); color: var(--c-ink);
+  font-weight: 700; font-size: var(--t-s-body); line-height: 1.5;
+  padding: var(--s-1) var(--s-3); border-radius: var(--r-1);
+}
+.chip-cop { background: var(--c-cool);  color: var(--c-ink); }
+.chip-gpt { background: var(--c-green); color: var(--c-ink); }
+.stack   { display: flex; flex-direction: column; gap: var(--s-3); }
+.stack-4 { display: flex; flex-direction: column; gap: var(--s-4); }
+.stack-5 { display: flex; flex-direction: column; gap: var(--s-5); }
+.push { margin-top: auto; margin-bottom: var(--s-3); }
+.muted-note { margin: 0; font-size: var(--t-s-small); color: var(--c-mute); line-height: 1.8; }
+.body-note { margin: 0; font-size: var(--t-s-small); color: var(--c-body); line-height: 1.85; }
+.rowline { display: flex; align-items: center; gap: var(--s-4); }
+.dotted-link { flex: 1; border-top: var(--rule-dot); }
+
+.bar {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 10;
+  display: flex; align-items: center; gap: var(--s-3);
+  padding: var(--s-2) var(--s-4);
+  background: var(--c-paper); border-top: var(--bd);
+}
+.bar button, .bar select {
+  font-family: var(--f-sans); font-size: var(--t-small); font-weight: 700;
+  padding: var(--s-1) var(--s-4); border: var(--bd-ink); border-radius: var(--r-1);
+  background: var(--c-paper); color: var(--c-ink); cursor: pointer; line-height: 1.6;
+}
+.bar select { flex: 1; min-width: 0; font-weight: 400; }
+.bar button:focus-visible, .bar select:focus-visible { outline: 2px solid var(--c-ink); outline-offset: 2px; }
+.bar .count {
+  font-family: var(--f-num); font-variant-numeric: tabular-nums;
+  font-size: var(--t-small); font-weight: 700; color: var(--c-ink);
+}
+.bar .hint {
+  font-size: var(--t-label); color: var(--c-mute); letter-spacing: var(--ls-label);
+  text-transform: uppercase; font-family: var(--f-disp); font-weight: 700;
+}
+
+@media print {
+  @page { size: 1280px 720px; margin: 0; }
+  body { background: var(--c-paper); }
+  .bar { display: none; }
+  .stage { position: static; display: block; overflow: visible; }
+  .slide { display: flex !important; transform: none !important; break-after: page; page-break-after: always; }
+  .slide:last-child { break-after: auto; page-break-after: auto; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+</head>
+<body>
+
+<div class="stage" id="stage">
+
+<!-- 01 表紙 -->
+<section class="slide" data-title="表紙">
+  <div class="s-head" style="gap:var(--s-4)">
+    <span class="label">Practical Handbook / 60 min</span>
+    <div class="display" style="font-size:var(--t-s-title)">Microsoft 365 Copilot &amp; ChatGPT</div>
+  </div>
+  <div class="s-body" style="justify-content:center; gap:var(--s-5)">
+    <h1 style="font-size:var(--t-s-hero); font-weight:900; line-height:1.15; letter-spacing:0">
+      <span class="mark">明日の業務</span>が変わる、<br>2つのAIの使い方
+    </h1>
+    <p class="s-lead" style="font-size:var(--t-s-h2); color:var(--c-mute); max-width:36em">
+      受信箱、会議、週報、Excel。いつも開いている画面から始める、実演20項目。<br>巻末に職種別プロンプト集（汎用）。
+    </p>
+  </div>
+  <div style="display:flex; gap:var(--s-7); border-top:var(--bd-ink); padding-top:var(--s-4)">
+    <div><div class="label">Slides</div><div class="stat" style="font-size:var(--t-display)">29</div></div>
+    <div><div class="label">Prompts</div><div class="stat" style="font-size:var(--t-display)">44</div></div>
+    <div><div class="label">Tools</div><div class="stat" style="font-size:var(--t-display)">2</div></div>
+    <div><div class="label">Date</div><div class="stat" style="font-size:var(--t-display)">2026.09</div></div>
+  </div>
+  <div class="footline">Practical Handbook</div>
+</section>
+
+<!-- 02 本日のゴール -->
+<section class="slide" data-title="本日のゴール">
+  <div class="s-head">
+    <div class="eyebrow"><span class="label">Objective</span></div>
+    <h1 class="s-title">この60分で持ち帰っていただくもの</h1>
+  </div>
+  <div class="s-body">
+    <div class="cols-3" style="align-items:stretch">
+      <div class="card card-tight stack">
+        <span class="num-badge">1</span>
+        <h2 style="font-size:var(--t-s-h2); font-weight:900">どちらを開くかがわかる</h2>
+        <p class="body-note">Copilot と ChatGPT の守備範囲に線を引ける。仕事を見た瞬間に、どちらに投げるかが決まる状態。</p>
+      </div>
+      <div class="card card-tight stack">
+        <span class="num-badge">2</span>
+        <h2 style="font-size:var(--t-s-h2); font-weight:900">自分の業務に接続できる</h2>
+        <p class="body-note">受信箱・会議・週報・Excel・提案書。すでに毎日開いている画面のどこで効くかが具体的に見える。</p>
+      </div>
+      <div class="card card-tight stack accent-card">
+        <span class="num-badge">3</span>
+        <h2 style="font-size:var(--t-s-h2); font-weight:900">明日そのまま使える文がある</h2>
+        <p class="body-note">掲載プロンプトはすべて実物。コピーして貼れば、今日の続きから同じ結果が出せます。</p>
+      </div>
+    </div>
+    <div class="bubble bubble-tight push">
+      <p style="margin:0; font-size:var(--t-s-body)">
+        今日いちばん覚えて帰っていただきたいのは、機能名ではなく <strong>「頼み方」</strong> です。同じ道具でも、頼み方で結果は別物になります。
+      </p>
+    </div>
+  </div>
+  <div class="footline">Objective</div><div class="pageno">02 / 20</div>
+</section>
+
+<!-- 03 アジェンダ -->
+<section class="slide" data-title="アジェンダ">
+  <div class="s-head">
+    <div class="eyebrow"><span class="label">Agenda</span></div>
+    <h1 class="s-title">本日の進行</h1>
+  </div>
+  <div class="s-body">
+    <table>
+      <thead>
+        <tr><th style="width:104px">Part</th><th style="width:230px">テーマ</th><th>扱う内容</th><th style="width:80px">時間</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="table-lead">PART 1</td>
+          <td><strong>土台をつくる</strong></td>
+          <td>2つの道具の守備範囲／4つの動詞での判断／すべての土台になる「頼み方の型」</td>
+          <td class="num">12分</td>
+        </tr>
+        <tr>
+          <td class="table-lead">PART 2</td>
+          <td><strong>Microsoft 365 Copilot</strong></td>
+          <td>社内ナレッジを探す／会議とメール／週報とタスク／Word・Excel・PowerPoint／越えてはいけない線</td>
+          <td class="num">20分</td>
+        </tr>
+        <tr>
+          <td class="table-lead">PART 3</td>
+          <td><strong>ChatGPT</strong></td>
+          <td>出力を制御する／文章とトーン／考えさせる／撮って渡す・画像生成／GPTs で固定する</td>
+          <td class="num">20分</td>
+        </tr>
+        <tr>
+          <td class="table-lead">CLOSE</td>
+          <td><strong>併用と、明日の3ステップ</strong></td>
+          <td>2つをつなぐ3つのリレー／持ち帰って最初にやること</td>
+          <td class="num">8分</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="split push" style="gap:var(--s-6); align-items:center">
+      <div class="prompt-set">
+        <span class="chip">開始前に ─ 手元で1つだけ試すなら</span>
+        <div class="prompt-mini">今日これから読む予定のメールのうち、
+返信が必要なものだけを、期限の近い順に並べて。</div>
+      </div>
+      <p class="muted-note">
+        画面共有で実演しながら進めます。手元で同じ操作を試していただいて構いません。
+        掲載プロンプトは、社名や案件名を置き換えるだけで動きます。
+      </p>
+    </div>
+  </div>
+  <div class="footline">Agenda</div><div class="pageno">03 / 20</div>
+</section>
+
+<!-- 04 守備範囲 -->
+<section class="slide" data-title="2つの道具 ─ 守備範囲">
+  <div class="s-head">
+    <div class="eyebrow"><span class="chip">Part 1</span><span class="label">Two Tools</span></div>
+    <h1 class="s-title">同じ仕事を頼んでも、返ってくるものが違う</h1>
+  </div>
+  <div class="s-body">
+    <div class="cols-2">
+      <div class="stack-4">
+        <div style="--c-sec:var(--c-cool)"><span class="band-sec">Microsoft 365 Copilot ─ 社内につながっている</span></div>
+        <ul class="ticks tight">
+          <li>Teams・Outlook・Word・Excel と統合されている</li>
+          <li>社内ファイル・会議ログ・メールを横断できる</li>
+          <li>見えるのは自分に権限のある範囲だけ（RBAC準拠）</li>
+        </ul>
+        <div class="prompt-set">
+          <span class="chip">来週の商談準備を Copilot に頼むと</span>
+          <div class="prompt-mini">来週商談のA社について、過去のメール・提案書・議事録を
+横断して、経緯と先方の懸念点をまとめて。
+出典（ファイル名・日付）も添えること。</div>
+        </div>
+      </div>
+      <div class="stack-4">
+        <div style="--c-sec:var(--c-green)"><span class="band-sec">ChatGPT ─ 考える力と生成量がある</span></div>
+        <ul class="ticks tight">
+          <li>案の幅、文体の調整、批評。壁打ち相手になる</li>
+          <li>画像・図表・手書きメモを読ませられる</li>
+          <li>知っているのは渡した情報＋一般知識＋Web だけ</li>
+        </ul>
+        <div class="prompt-set">
+          <span class="chip">同じ商談準備を ChatGPT に頼むと</span>
+          <div class="prompt-mini">「価格が高い」という懸念への切り返しを、値引き以外で、
+相手の不安の種類別に5つ挙げて。
+それぞれ逆効果になる場面も一文で添えること。</div>
+        </div>
+      </div>
+    </div>
+    <div class="bubble bubble-tight push">
+      <p class="body-note">
+        優劣ではなく<strong>守備範囲の違い</strong>です。同じ商談準備でも、頼めることが最初から別。だから両方を持つ意味があります。
+      </p>
+    </div>
+  </div>
+  <div class="footline">Part 1 / Two Tools</div><div class="pageno">04 / 20</div>
+</section>
+
+<!-- 05 4つの動詞 -->
+<section class="slide" data-title="4つの動詞 ─ どちらを開くか">
+  <div class="s-head">
+    <div class="eyebrow"><span class="chip">Part 1</span><span class="label">Four Verbs</span></div>
+    <h1 class="s-title">やりたいことを4つの動詞に分けると、迷わない</h1>
+  </div>
+  <div class="s-body">
+    <div class="cols-4">
+      <div class="cat cat-a">
+        <span class="label">Read</span>
+        <h3>読む</h3>
+        <p><strong>社内 → Copilot</strong><br><strong>手元 → ChatGPT</strong></p>
+        <div class="prompt-mini">このスレッドを、決定事項と
+私のアクションに分けて要約して</div>
+      </div>
+      <div class="cat cat-b">
+        <span class="label">Find</span>
+        <h3>探す</h3>
+        <p><strong>Copilot 一択。</strong>社外AIに社内の探し物は頼めません。</p>
+        <div class="prompt-mini">新プランの価格改定を議論した
+資料を、内容から探して</div>
+      </div>
+      <div class="cat cat-c">
+        <span class="label">Make</span>
+        <h3>つくる・考える</h3>
+        <p><strong>ChatGPT が強い。</strong>案の幅と文章の質。</p>
+        <div class="prompt-mini">この提案の切り口を、性質の
+違うものを5つ挙げて</div>
+      </div>
+      <div class="cat cat-d">
+        <span class="label">Fix</span>
+        <h3>固定する</h3>
+        <p><strong>GPTs にする</strong>か、定型文をチームで共有。</p>
+        <div class="prompt-mini">この指示を毎回使う。GPTsの
+カスタム指示の形に整えて</div>
+      </div>
+    </div>
+    <div class="split push" style="gap:var(--s-6)">
+      <div>
+        <div class="band-ink">判断の一行ルール</div>
+        <ul class="ticks tight" style="margin-top:var(--s-3)">
+          <li><strong>社内の事実</strong>が要るなら Copilot。<strong>案の数と質</strong>が要るなら ChatGPT。</li>
+          <li>両方要るなら、Copilot で集めてから ChatGPT に渡す（P.19）。</li>
+        </ul>
+      </div>
+      <div class="card card-tight">
+        <span class="label">Caution</span>
+        <p class="body-note" style="margin-top:var(--s-2)">
+          いちばん間違えやすいのが「探す」です。<strong>ここを取り違えると情報漏えいになります</strong>（P.12）。
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="footline">Part 1 / Four Verbs</div><div class="pageno">05 / 20</div>
+</section>
+
+<!-- 06 頼み方の型 -->
+<section class="slide" data-title="★ 頼み方の型">
+  <div class="s-head">
+    <div class="eyebrow"><span class="chip">Core</span><span class="label">The Format</span></div>
+    <h1 class="s-title">今日いちばん大事な1枚 ─ 頼み方の型</h1>
+  </div>
+  <div class="s-body">
+    <div class="split">
+      <div class="prompt-set">
+        <span class="chip">5つの見出しで区切るだけ ─ 両方に効く</span>
+        <div class="prompt prompt-lean">#役割
+あなたは経験豊富なIT導入コンサルタントです。
+
+#命令
+勤怠管理システムの入れ替え候補を比較してください。
+
+#文脈
+当社は従業員50名の日本企業。現在はExcel台帳で管理して
+おり、集計ミスと締め作業の残業が課題です。
+
+#制約事項
+- 日本国内でサポートがある製品
+- 2024年以降の最新情報
+- 費用が不明な場合は空欄にせず「要問い合わせ」と記載
+
+#出力指示
+製品名 / 初期費用 / 月額 / 特徴 / 導入事例 の表で、3製品</div>
+      </div>
+      <div class="stack-4">
+        <div class="steps steps-tight">
+          <div class="step"><span class="num-badge">1</span><div><div class="step-t">#役割</div><div class="step-d">誰として答えるか。専門家を指定すると語彙と観点が変わる。</div></div></div>
+          <div class="step"><span class="num-badge">2</span><div><div class="step-t">#命令</div><div class="step-d">やってほしいことを一文で。ここだけ書くのが「ふつうの使い方」。</div></div></div>
+          <div class="step"><span class="num-badge">3</span><div><div class="step-t">#文脈</div><div class="step-d">自社の状況。ここを書くと一般論が自分ごとの答えになる。</div></div></div>
+          <div class="step"><span class="num-badge">4</span><div><div class="step-t">#制約事項</div><div class="step-d">やってほしくないことを先に潰す。<span class="mark">やり直しがいちばん減るのはここ</span>。</div></div></div>
+          <div class="step"><span class="num-badge">5</span><div><div class="step-t">#出力指示</div><div class="step-d">形式と数。「3製品」と書かないと数が揃いません。</div></div></div>
+        </div>
+        <p class="muted-note">全部書く必要はありません。<strong>うまくいかないときに、足りない見出しを1つ足す。</strong>それだけで直ります。</p>
+      </div>
+    </div>
+  </div>
+  <div class="footline">The Format &mdash; Core</div><div class="pageno">06 / 20</div>
+</section>
+
+<!-- 07 Copilot 章扉 -->
+<section class="slide ink" data-title="── PART 2 章扉 Copilot" data-sec="copilot">
+  <div class="s-head">
+    <div class="eyebrow"><span class="chip">Part 2</span><span class="label">20 min</span></div>
+  </div>
+  <div class="s-body" style="justify-content:center; gap:var(--s-5)">
+    <div class="split" style="align-items:center; gap:var(--s-8)">
+      <div class="stack-5">
+        <div class="display" style="font-size:var(--t-s-hero)">Microsoft<br>365 Copilot</div>
+        <h2 style="font-size:var(--t-s-h2); font-weight:700; line-height:1.8">
+          いつもの受信箱、いつもの会議、いつもの週報。<br>
+          <span style="color:var(--c-sec)">新しい画面を開かずに</span>効くところから見ていきます。
+        </h2>
+      </div>
+      <div class="prompt-set">
+        <span class="chip">この章の代表プロンプト</span>
+        <div class="prompt prompt-lean">先月の営業定例で「新プラン価格」について
+決まったことを、会議の録画・チャット・
+SharePoint上の資料から探して、
+以下に分けてまとめて
+
+- 決定事項（誰が / 何を / いつまでに）
+- 保留になったこと
+- 出典（ファイル名・会議日）</div>
+      </div>
+    </div>
+  </div>
+  <div style="display:flex; gap:var(--s-3); flex-wrap:wrap">
+    <span class="chip">探す</span><span class="chip">会議</span><span class="chip">メール</span><span class="chip">週報</span><span class="chip">Word / Excel</span><span class="chip">ガバナンス</span>
+  </div>
+  <div class="footline">Part 2</div><div class="pageno">07 / 20</div>
+</section>
+
+<!-- 08 Copilot 探す -->
+<section class="slide" data-title="Copilot ① 探す" data-sec="copilot">
+  <div class="s-head">
+    <div class="eyebrow"><span class="chip">Part 2</span><span class="label">Copilot / Search</span></div>
+    <h1 class="s-title">ファイル名を覚えていなくても、中身で探せる</h1>
+  </div>
+  <div class="s-body">
+    <div class="split">
+      <div class="prompt-set">
+        <span class="chip">Step 1 ─ 内容で探す</span>
+        <div class="prompt prompt-lean">新プランの価格改定について議論した資料を探して。
+ファイル名ではなく、内容に価格表や値上げ幅の記載が
+あるものを対象にして。</div>
+        <span class="chip">Step 2 ─ 経緯をつかむ</span>
+        <div class="prompt prompt-lean">A社とのやり取りを、初回問い合わせから現在まで
+時系列で要約して。担当者の交代があれば明記すること。</div>
+        <span class="chip">Step 3 ─ 抜けを探す</span>
+        <div class="prompt prompt-lean">今週の私のチャットとメールから、まだ返答していない
+依頼を洗い出して。依頼者 / 内容 / 経過日数 の表で、
+経過日数の長い順に。</div>
+      </div>
+      <div class="stack-4">
+        <div class="panel">
+          <div class="band">命中率を上げる2つの癖</div>
+          <ul class="ticks tight" style="margin-top:var(--s-3)">
+            <li><strong>固有名詞を入れる。</strong>「あの資料」ではなく案件名・製品名・部署名で。</li>
+            <li><strong>出典を出させる。</strong>出力指示に「出典（ファイル名・日付）」を入れておくと、そのまま裏取りできます。</li>
+          </ul>
+        </div>
+        <div class="card card-tight">
+          <span class="label">Note</span>
+          <p class="body-note" style="margin-top:var(--s-2)">
+            見えるのは<strong>自分がアクセス権を持つ範囲だけ</strong>。Copilot を使っても権限は1ミリも増えません。
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footline">Part 2 / Search</div><div class="pageno">08 / 20</div>
+</section>
+
+<!-- 09 Copilot 会議とメール -->
+<section class="slide" data-title="Copilot ② 会議とメール" data-sec="copilot">
+  <div class="s-head">
+    <div class="eyebrow"><span class="chip">Part 2</span><span class="label">Copilot / Teams &amp; Outlook</span></div>
+    <h1 class="s-title">会議のあと10秒、メールの前に10秒</h1>
+  </div>
+  <div class="s-body">
+    <div class="split">
+      <div class="prompt-set">
+        <span class="chip">Teams ─ 会議が終わった直後に</span>
+        <div class="prompt prompt-lean">この会議を要約して、以下の形式で出力して
+- 決定事項（誰が / 何を / いつまでに）
+- 未決事項と次回持ち越し
+- 私に割り当てられたアクション</div>
+        <span class="chip">Teams ─ 欠席した会議に追いつく</span>
+        <div class="prompt prompt-lean">この会議で、私の担当案件に関係する発言だけを
+抜き出して。発言者と、対応が必要かどうかも添えて。</div>
+        <span class="chip">Outlook ─ 返信の下書き</span>
+        <div class="prompt prompt-lean">このスレッドを時系列で要約したうえで、先方の依頼への
+返信文の下書きを作成して。納期については
+「社内確認のうえ改めて回答」というトーンで。</div>
+      </div>
+      <div class="stack-4">
+        <div class="panel">
+          <div class="band">「要約して」だけでは足りない</div>
+          <p class="body-note" style="margin-top:var(--s-3)">
+            会議要約でいちばん価値があるのは <strong>「誰が / 何を / いつまでに」</strong>の3点セットです。
+            これを書かないと、読んでも動けない議事録が返ります。
+          </p>
+        </div>
+        <div class="card card-tight">
+          <span class="label">Rule</span>
+          <p class="body-note" style="margin-top:var(--s-2)">
+            <strong>送信前に必ず自分で読む。</strong>予定の見落としと敬語の相性は人が最終確認。
+            下書きまでを任せる、が現実的な線です。
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footline">Part 2 / Teams &amp; Outlook</div><div class="pageno">09 / 20</div>
+</section>
+
+<!-- 10 Copilot 週報 -->
+<section class="slide" data-title="Copilot ③ 週報とタスク" data-sec="copilot">
+  <div class="s-head">
+    <div class="eyebrow"><span class="chip">Part 2</span><span class="label">Copilot / Routine</span></div>
+    <h1 class="s-title">項目を固定すると、報告が「比較できる形」で溜まる</h1>
+  </div>
+  <div class="s-body">
+    <div class="split">
+      <div class="prompt-set">
+        <span class="chip">週報 ─ そのままコピーして使えます</span>
+        <div class="prompt prompt-lean">今週の私のTeamsチャット、メール、更新したファイルを
+基に、週報を以下の項目で作成して
+（該当がない項目は「なし」と記載）
+
+- 今週の成果
+- 進行中の案件と進捗
+- 遅延・リスク
+- 来週の予定
+- 依頼・相談事項</div>
+        <span class="chip">タスク ─ 優先順位をつけさせる</span>
+        <div class="prompt prompt-lean">私に割り当てられた未完了タスクを洗い出して、
+「期限が近い」「他人が待っている」の2軸で
+優先順位をつけて並べて。</div>
+      </div>
+      <div class="stack-4">
+        <div class="panel">
+          <div class="band">この一行を必ず入れる</div>
+          <p class="body-note" style="margin-top:var(--s-3)">
+            <strong>「該当がない項目は『なし』と記載」。</strong>
+            これがないと、書いていないことを推測で埋めてきます。
+            もっともらしい文章なので、後から気づけません。
+          </p>
+        </div>
+        <div class="card card-tight">
+          <span class="label">Tips</span>
+          <p class="body-note" style="margin-top:var(--s-2)">
+            項目リストを一度決めたら、<strong>チームで共有してしまう。</strong>
+            全員が同じ型で出すようになると、読む側の時間がいちばん減ります。
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footline">Part 2 / Routine</div><div class="pageno">10 / 20</div>
+</section>
+
+<!-- 11 Copilot Office -->
+<section class="slide" data-title="Copilot ④ Word・Excel・PowerPoint" data-sec="copilot">
+  <div class="s-head">
+    <div class="eyebrow"><span class="chip">Part 2</span><span class="label">Copilot / Office</span></div>
+    <h1 class="s-title">文書の中で呼ぶ ─ Word・Excel・PowerPoint</h1>
+  </div>
+  <div class="s-body">
+    <table class="t-compact">
+      <thead><tr><th style="width:140px">アプリ</th><th style="width:210px">使いどころ</th><th>プロンプト</th></tr></thead>
+      <tbody>
+        <tr><td class="table-lead">Word</td><td>体裁を変える</td><td>この議事録を、社外提出用の報告書の体裁に書き直して。決定事項を冒頭に置き、社内用語は一般的な表現に置き換えること。</td></tr>
+        <tr><td class="table-lead">Excel</td><td>傾向をつかむ</td><td>この表の特徴を整理して、集計・分析の観点を3つ提案して。根拠となるセル範囲も併せて示すこと。</td></tr>
+        <tr><td class="table-lead">Excel</td><td>見える形にする</td><td>最も売上に貢献しているカテゴリを縦棒グラフで示して。最新期だけ色を変えること。</td></tr>
+        <tr><td class="table-lead">PowerPoint</td><td>構成から作る</td><td>このWord文書を基に、10枚のスライド構成案を作って。1枚1メッセージで、各枚に見出しと要点3行。</td></tr>
+      </tbody>
+    </table>
+    <div class="split push" style="gap:var(--s-6)">
+      <div class="prompt-set">
+        <span class="chip">数字が合わないと感じたら</span>
+        <div class="prompt-mini">この集計を、実際に計算し直して。
+使った計算式と対象セル範囲も示すこと。</div>
+      </div>
+      <div>
+        <div class="band-ink">Office での勘どころ</div>
+        <ul class="ticks tight" style="margin-top:var(--s-3)">
+          <li><strong>元の文書を開いた状態で呼ぶ。</strong>貼り直すより、その場で頼む方が文脈が伝わります。</li>
+          <li><strong>「根拠を示せ」を必ず添える。</strong>セル範囲や引用元が出れば、そのまま検算できます。</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="footline">Part 2 / Office</div><div class="pageno">11 / 20</div>
+</section>
+
+<!-- 12 Copilot ガバナンス -->
+<section class="slide" data-title="Copilot ⑤ 越えてはいけない線" data-sec="copilot">
+  <div class="s-head">
+    <div class="eyebrow"><span class="chip">Part 2</span><span class="label">Governance</span></div>
+    <h1 class="s-title">越えてはいけない線は、3本だけ</h1>
+  </div>
+  <div class="s-body">
+    <div class="cols-3" style="align-items:stretch">
+      <div class="card card-tight stack">
+        <span class="chip">Access</span>
+        <h2 style="font-size:var(--t-s-h2); font-weight:900">権限は変わらない</h2>
+        <p class="body-note">見えてはいけない資料が出てきたら、それは AI の問題ではなく<strong>元の権限設定の問題</strong>。すぐ管理者へ。</p>
+      </div>
+      <div class="card card-tight stack">
+        <span class="chip">Confidential</span>
+        <h2 style="font-size:var(--t-s-h2); font-weight:900">社外AIに入れない</h2>
+        <p class="body-note">社外秘・個人情報・未公開の数値を、<strong>社外の汎用AIに貼らない</strong>。社内データの仕事は Copilot 側で完結させる。</p>
+      </div>
+      <div class="card card-tight stack accent-card">
+        <span class="chip">IP</span>
+        <h2 style="font-size:var(--t-s-h2); font-weight:900">生成物を確認する</h2>
+        <p class="body-note">出てきた文章・画像をそのまま社外公開しない。<strong>人が確認する工程</strong>を公開フローに1つ足す。</p>
+      </div>
+    </div>
+    <div class="split push" style="gap:var(--s-6)">
+      <div class="prompt-set">
+        <span class="chip">社外に出す前の、自己点検プロンプト</span>
+        <div class="prompt-mini">この文章に、社外に出せない情報が含まれていないか指摘して。
+対象は「未公開の数値」「個人名」「取引先の固有条件」の3種類。
+該当箇所をそのまま引用して示し、判断に迷うものは
+「要確認」として分けて挙げること。</div>
+      </div>
+      <div class="bubble">
+        <p class="body-note">
+          「怖いから使わない」ための話ではありません。<strong>ここを押さえた人だけが、遠慮なく踏み込める</strong>という話です。
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="footline">Part 2 / Governance</div><div class="pageno">12 / 20</div>
+</section>
+
+<!-- 13 ChatGPT 章扉 -->
+<section class="slide ink" data-title="── PART 3 章扉 ChatGPT" data-sec="chatgpt">
+  <div class="s-head">
+    <div class="eyebrow"><span class="chip">Part 3</span><span class="label">20 min</span></div>
+  </div>
+  <div class="s-body" style="justify-content:center; gap:var(--s-5)">
+    <div class="split" style="align-items:center; gap:var(--s-8)">
+      <div class="stack-5">
+        <div class="display" style="font-size:var(--t-s-hero)">ChatGPT</div>
+        <h2 style="font-size:var(--t-s-h2); font-weight:700; line-height:1.8">
+          ここからは「集める」から「<span style="color:var(--c-sec)">考えさせる</span>」へ。<br>
+          書かせるより、読ませる・批評させる方が価値が出る場面を扱います。
+        </h2>
+      </div>
+      <div class="prompt-set">
+        <span class="chip">この章の代表プロンプト</span>
+        <div class="prompt prompt-lean">この提案書を、コスト重視の役員の立場で
+読んで、突っ込まれそうな点を3つ挙げて。
+
+#制約事項
+- 修正案は不要。指摘だけ
+- 「わかりにくい」ではなく、どの記述が
+  どう誤解されるかを書く
+- 優先度の高い順に並べる</div>
+      </div>
+    </div>
+  </div>
+  <div style="display:flex; gap:var(--s-3); flex-wrap:wrap">
+    <span class="chip">出力制御</span><span class="chip">文章とトーン</span><span class="chip">壁打ち</span><span class="chip">Vision</span><span class="chip">画像生成</span><span class="chip">GPTs</span>
+  </div>
+  <div class="footline">Part 3</div><div class="pageno">13 / 20</div>
+</section>
+
+<!-- 14 ChatGPT 出力制御 -->
+<section class="slide" data-title="ChatGPT ① 出力を制御する" data-sec="chatgpt">
+  <div class="s-head">
+    <div class="eyebrow"><span class="chip">Part 3</span><span class="label">Output Control</span></div>
+    <h1 class="s-title">見本を1つ渡すと、精度が跳ね上がる</h1>
+  </div>
+  <div class="s-body">
+    <div class="split">
+      <div class="prompt-set">
+        <span class="chip">Few-Shot ─ 例を見せてから本番を渡す</span>
+        <div class="prompt prompt-lean">以下の要領で、問い合わせを分類してください。
+
+【例】
+入力：「請求書の再発行をお願いします」
+出力：カテゴリ=経理 / 緊急度=中 / 一次回答=可
+
+入力：「システムにログインできません」
+出力：カテゴリ=IT / 緊急度=高 / 一次回答=不可
+
+【本番】
+入力：「先月の納品数が発注書と合っていません」
+出力：</div>
+        <span class="chip">形式を先に決める</span>
+        <div class="prompt prompt-lean">Markdownの表で出力して。列は「観点 / 現状 / 課題 / 打ち手」。
+1セル40文字以内。前置きと後書きは書かないこと。</div>
+      </div>
+      <div class="stack-4">
+        <div class="panel">
+          <div class="band">効くのは、この3つの指定</div>
+          <ul class="ticks tight" style="margin-top:var(--s-3)">
+            <li><strong>役割付与</strong> ─ 誰として答えるか</li>
+            <li><strong>前提条件</strong> ─ どんな状況で使うのか</li>
+            <li><strong>出力形式</strong> ─ 表か、何文字か、何案か</li>
+          </ul>
+        </div>
+        <div class="card card-tight">
+          <span class="label">Tips</span>
+          <p class="body-note" style="margin-top:var(--s-2)">
+            <strong>「前置きと後書きは書かないこと」</strong>が、地味ながら最も効く一行。そのまま資料に貼れる状態で返ります。
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footline">Part 3 / Output Control</div><div class="pageno">14 / 20</div>
+</section>
+
+<!-- 15 ChatGPT 文章とトーン -->
+<section class="slide" data-title="ChatGPT ② 文章とトーン" data-sec="chatgpt">
+  <div class="s-head">
+    <div class="eyebrow"><span class="chip">Part 3</span><span class="label">Writing</span></div>
+    <h1 class="s-title">ゼロから書かせるより、自分の文を渡して直させる</h1>
+  </div>
+  <div class="s-body">
+    <div class="split">
+      <div class="prompt-set">
+        <span class="chip">1つの内容を、3つの宛先に書き分ける</span>
+        <div class="prompt prompt-lean">以下の内容を、内容を変えずに3つのトーンで書き分けて
+
+- 社内向け：結論先出し・敬語は最小限・200文字以内
+- 顧客向け：丁寧・背景説明あり・400文字以内
+- SNS向け：140文字以内・専門用語なし・絵文字なし
+
+【内容】（ここに元の文章を貼る）</div>
+        <span class="chip">推敲させる</span>
+        <div class="prompt prompt-lean">この文章を、意味を変えずに3割短くして。
+削った箇所と、削った理由も併せて示すこと。</div>
+      </div>
+      <div class="stack-4">
+        <div class="panel">
+          <div class="band">自分の主張は残り、表現だけが磨かれる</div>
+          <p class="body-note" style="margin-top:var(--s-3)">
+            白紙から書かせると、当たり障りのない文章になります。
+            <strong>自分の草稿を渡す</strong>方が速く、質も安定します。
+          </p>
+        </div>
+        <div>
+          <div class="band-ink">言い回しに詰まったとき</div>
+          <ul class="ticks tight" style="margin-top:var(--s-3)">
+            <li><code>この断り文を、関係を壊さずに断る言い方に直して。代案を1つ添える形で。</code></li>
+            <li><code>この文章で、誤解を招きそうな表現を指摘して。修正案は不要。</code></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footline">Part 3 / Writing</div><div class="pageno">15 / 20</div>
+</section>
+
+<!-- 16 ChatGPT 考えさせる -->
+<section class="slide" data-title="ChatGPT ③ 考えさせる" data-sec="chatgpt">
+  <div class="s-head">
+    <div class="eyebrow"><span class="chip">Part 3</span><span class="label">Thinking Partner</span></div>
+    <h1 class="s-title">書かせるより、読ませる方が価値が出る</h1>
+  </div>
+  <div class="s-body">
+    <table class="t-compact">
+      <thead><tr><th style="width:150px">頼み方</th><th style="width:190px">使いどころ</th><th>プロンプト</th></tr></thead>
+      <tbody>
+        <tr><td class="table-lead">立場を与える</td><td>提出前の事前防御</td><td>この提案書を、コスト重視の役員の立場で読んで、突っ込まれそうな点を3つ挙げて。修正案は不要。</td></tr>
+        <tr><td class="table-lead">逆を言わせる</td><td>思い込みの点検</td><td>この企画に反対する立場から、最も強い反論を3つ書いて。感情論ではなく、数字や前提の穴を突くこと。</td></tr>
+        <tr><td class="table-lead">観点を出させる</td><td>検討の抜け防止</td><td>この意思決定で、検討から漏れがちな観点を5つ挙げて。それぞれ、漏らすと何が起きるかも一文で。</td></tr>
+        <tr><td class="table-lead">分解させる</td><td>大きすぎる課題</td><td>この課題を、独立して着手できる単位に分解して。各単位の所要時間の目安と、着手順も添えて。</td></tr>
+      </tbody>
+    </table>
+    <div class="split push" style="gap:var(--s-6)">
+      <div class="prompt-set">
+        <span class="chip">答えを先に言わせない ─ 理解を確かめる</span>
+        <div class="prompt-mini">この仕組みを私が理解できているか確認したい。
+説明せず、私に問いを1つずつ出して。
+答えが不十分なときだけ、補足してください。</div>
+      </div>
+      <div>
+        <div class="band-ink">壁打ちが効く条件</div>
+        <ul class="ticks tight" style="margin-top:var(--s-3)">
+          <li><strong>立場を指定する。</strong>「役員として」「新入社員として」で、出てくる指摘が変わります。</li>
+          <li><strong>「修正案は不要」と書く。</strong>直させると論点がぼやけます。指摘だけの方が使えます。</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="footline">Part 3 / Thinking Partner</div><div class="pageno">16 / 20</div>
+</section>
+
+<!-- 17 ChatGPT マルチモーダル -->
+<section class="slide" data-title="ChatGPT ④ 撮って渡す・画像生成" data-sec="chatgpt">
+  <div class="s-head">
+    <div class="eyebrow"><span class="chip">Part 3</span><span class="label">Vision &amp; Image</span></div>
+    <h1 class="s-title">文字にしなくていい。撮って渡す</h1>
+  </div>
+  <div class="s-body">
+    <table class="t-compact">
+      <thead><tr><th style="width:180px">渡すもの</th><th style="width:150px">用途</th><th>プロンプト</th></tr></thead>
+      <tbody>
+        <tr><td class="table-lead">ホワイトボードの写真</td><td>会議のあと、その場で</td><td>添付の写真から議事録を作成して。読み取れない箇所は「判読不可」と明記し、推測で埋めないこと。</td></tr>
+        <tr><td class="table-lead">手書きの構成案</td><td>企画の構造化</td><td>添付の手書きメモを、階層構造の箇条書きに起こして。書かれていない項目は追加しないこと。</td></tr>
+        <tr><td class="table-lead">グラフ・図表の画像</td><td>他社資料の読解</td><td>このグラフから読み取れる事実だけを3点挙げて。解釈や推測は分けて記載すること。</td></tr>
+        <tr><td class="table-lead">画面キャプチャ</td><td>エラーの相談</td><td>この画面の状態を説明し、考えられる原因を可能性の高い順に3つ挙げて。</td></tr>
+      </tbody>
+    </table>
+    <div class="split push" style="gap:var(--s-6)">
+      <div class="prompt-set">
+        <span class="chip">画像生成 ─ 制約事項がすべて</span>
+        <div class="prompt-mini">プレゼン資料の扉に使う抽象イメージを生成して
+#制約事項
+- 16:9 / 文字を一切入れない
+- 寒色系・彩度低め
+- 中央に余白を残す（タイトルを重ねるため）</div>
+      </div>
+      <div>
+        <div class="band">「推測で埋めないこと」を必ず添える</div>
+        <p class="body-note" style="margin-top:var(--s-3)">
+          画像読み取りで最も危険なのは、<strong>読めなかった箇所を自然な文章で埋めてしまう</strong>ことです。
+          「判読不可と明記」「事実と解釈を分ける」の一行が、これを止めます。
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="footline">Part 3 / Vision &amp; Image</div><div class="pageno">17 / 20</div>
+</section>
+
+<!-- 18 GPTs -->
+<section class="slide" data-title="ChatGPT ⑤ GPTsで固定する" data-sec="chatgpt">
+  <div class="s-head">
+    <div class="eyebrow"><span class="chip">Part 3</span><span class="label">GPTs</span></div>
+    <h1 class="s-title">毎回同じ指示を書いているなら、それは GPTs にできる</h1>
+  </div>
+  <div class="s-body">
+    <div class="split">
+      <div class="prompt-set">
+        <span class="chip">社内問い合わせ一次対応 GPT の設定例</span>
+        <div class="prompt prompt-lean">【名前】社内問い合わせ一次対応
+
+【説明】就業規則・経費規程・IT申請の質問に、
+社内ルールに基づいて答えます。
+
+【カスタム指示】
+#役割
+当社の従業員からの問い合わせに対応するヘルプデスクです。
+
+#制約事項
+- 添付資料に記載がない場合、推測で答えず
+  「資料内に該当情報が見当たりません」と述べる
+- 金額・期限・申請手順は資料の数値を正確に伝える
+- 回答の最後に必ず「対応担当部署」を明記する
+
+【ナレッジ】就業規則.pdf / 経費精算マニュアル.pdf</div>
+      </div>
+      <div class="stack-4">
+        <div class="panel">
+          <div class="band">効く GPTs の共通点</div>
+          <ul class="ticks tight" style="margin-top:var(--s-3)">
+            <li><strong>資料を持たせる。</strong>社内マニュアルを添付した瞬間、汎用AIが社内ツールに変わります。</li>
+            <li><strong>「資料にない場合」を書く。</strong>この一行が作り話を止めます。最も重要な設定です。</li>
+            <li><strong>締めを固定する。</strong>「必ず担当部署を明記」で、社内展開できる品質になります。</li>
+          </ul>
+        </div>
+        <div class="card card-tight">
+          <p class="body-note">
+            最初の1個は<strong>「今週いちばん多く書いた指示文」</strong>を保存するだけで十分。凝った GPT より、毎日使う GPT が勝ちます。
+          </p>
+        </div>
+        <p class="muted-note">※ ナレッジに添付する資料は、社外秘の取り扱い規程に従って選定してください（P.12）。</p>
+      </div>
+    </div>
+  </div>
+  <div class="footline">Part 3 / GPTs</div><div class="pageno">18 / 20</div>
+</section>
+
+<!-- 19 併用 -->
+<section class="slide" data-title="併用 ─ 3つのリレー">
+  <div class="s-head">
+    <div class="eyebrow"><span class="label">Relay</span></div>
+    <h1 class="s-title">片方の出力を、もう片方の入力にする</h1>
+  </div>
+  <div class="s-body">
+    <div class="cols-3" style="align-items:stretch">
+      <div class="card card-tight stack">
+        <div class="rowline" style="gap:var(--s-2)">
+          <span class="chip chip-gpt">ChatGPT</span><span class="num" style="color:var(--c-mute)">&rarr;</span><span class="chip chip-cop">Copilot</span>
+        </div>
+        <h2 style="font-size:var(--t-s-h2); font-weight:900">広げてから、裏を取る</h2>
+        <div class="prompt-mini">① ChatGPT へ
+新規顧客層の開拓案を、性質の違う
+切り口で10個出して
+② Copilot へ
+上記のうち「既存顧客の紹介」に
+関係する社内実績を探して、事例を3件</div>
+        <p class="muted-note">企画立案・提案書づくり</p>
+      </div>
+      <div class="card card-tight stack">
+        <div class="rowline" style="gap:var(--s-2)">
+          <span class="chip chip-cop">Copilot</span><span class="num" style="color:var(--c-mute)">&rarr;</span><span class="chip chip-gpt">ChatGPT</span>
+        </div>
+        <h2 style="font-size:var(--t-s-h2); font-weight:900">集めてから、磨く</h2>
+        <div class="prompt-mini">① Copilot へ
+今期の施策と結果を、社内資料から
+時系列でまとめて。出典も添えて
+② ChatGPT へ
+この報告文を、初見の相手に伝わる
+構成に組み替えて。変えた理由も</div>
+        <p class="muted-note">報告書・社外向け文書</p>
+      </div>
+      <div class="card card-tight stack accent-card">
+        <div class="rowline" style="gap:var(--s-2)">
+          <span class="chip chip-cop">Copilot</span><span class="num">&harr;</span><span class="chip chip-gpt">ChatGPT</span>
+        </div>
+        <h2 style="font-size:var(--t-s-h2); font-weight:900">書き手と、読み手に分ける</h2>
+        <div class="prompt-mini">① Copilot へ
+社内資料を基に、提案書の
+たたき台を作成して
+② ChatGPT へ
+これをコスト重視の役員の立場で読んで、
+突っ込まれそうな点を3つ。指摘だけ</div>
+        <p class="muted-note" style="color:var(--c-body)">レビュー・事前防御</p>
+      </div>
+    </div>
+    <div class="bubble bubble-tight push">
+      <p class="body-note">
+        共通するのは <strong>「事実は Copilot、判断材料は ChatGPT」</strong>という分業。受け渡しで社外秘を落とす一手間だけ、必ず人が行ってください。
+      </p>
+    </div>
+  </div>
+  <div class="footline">Relay</div><div class="pageno">19 / 20</div>
+</section>
+
+<!-- 20 まとめ -->
+<section class="slide" data-title="明日からの3ステップ">
+  <div class="s-head">
+    <div class="eyebrow"><span class="label">Next Actions</span></div>
+    <h1 class="s-title">明日、この順番でやってみてください</h1>
+  </div>
+  <div class="s-body">
+    <div class="cols-3" style="align-items:stretch">
+      <div class="card card-tight stack">
+        <span class="stat" style="font-size:var(--t-display)">1<span class="stat-unit">日目</span></span>
+        <h2 style="font-size:var(--t-s-h2); font-weight:900">Copilot で週報を出す</h2>
+        <div class="prompt-mini">今週の私のTeamsチャット、メール、
+更新したファイルを基に週報を作成して。
+項目は 成果 / 進捗 / リスク / 来週の
+予定 / 相談事項。該当なしは「なし」と。</div>
+      </div>
+      <div class="card card-tight stack">
+        <span class="stat" style="font-size:var(--t-display)">3<span class="stat-unit">日目</span></span>
+        <h2 style="font-size:var(--t-s-h2); font-weight:900">制約事項を3行足す</h2>
+        <div class="prompt-mini">#制約事項
+- 1項目3行以内
+- 社外秘の数値は「非公開」と伏せる
+- 推測で書かず「未確認」と明記する</div>
+      </div>
+      <div class="card card-tight stack accent-card">
+        <span class="stat" style="font-size:var(--t-display)">1<span class="stat-unit">週間後</span></span>
+        <h2 style="font-size:var(--t-s-h2); font-weight:900">GPTs にして固定する</h2>
+        <div class="prompt-mini">【名前】週報アシスタント
+【カスタム指示】
+#役割 週報作成を補助します。
+#制約事項
+- 資料にないことは書かない
+- 最後に未確認事項を列挙する</div>
+      </div>
+    </div>
+    <div class="panel-ink push">
+      <div class="label" style="color:var(--c-ground-mute)">Remember</div>
+      <p style="margin:var(--s-2) 0 0; font-size:var(--t-s-h2); font-weight:700; line-height:1.6; color:var(--c-ground-ink)">
+        覚えて帰るのは機能名ではなく、<strong>頼み方</strong>。役割・文脈・制約・出力形式。
+      </p>
+    </div>
+  </div>
+  <div class="footline">Thank you</div><div class="pageno">20 / 20</div>
+</section>
+
+
+<!-- ============================================================
+     APPENDIX ─ 職種別プロンプト集（汎用）／モノクロ
+     出典：~/.claude/skills
+       営業 #6 #7 #9 ／ 人事 P00 P16 P19 P21 ／ マーケ P06 P08 ／ 汎用 §0-§20
+     data-sec を付けないため、セクション色は乗らない。
+     ============================================================ -->
+
+<!-- A-00 章扉 -->
+<section class="slide ink" data-title="── APPENDIX 章扉">
+  <div class="s-head">
+    <div class="eyebrow"><span class="chip">Appendix</span><span class="label">By Job Function</span></div>
+  </div>
+  <div class="s-body" style="justify-content:center; gap:var(--s-5)">
+    <div class="split" style="align-items:center; gap:var(--s-8)">
+      <div class="stack-5">
+        <div class="display" style="font-size:var(--t-s-hero)">職種別<br>プロンプト集</div>
+        <h2 style="font-size:var(--t-s-h2); font-weight:700; line-height:1.8">
+          営業・マーケ・人事・バックオフィス。<br>
+          本編 <strong>P.06「頼み方の型」</strong>を、職種の実務に具体化したものです。
+        </h2>
+      </div>
+      <div class="prompt-set">
+        <span class="chip">共通の使い方</span>
+        <div class="prompt prompt-lean">{{ }} を全部埋めてから投げる。
+
+埋め残しの {{ }} を含んだまま投げると、
+AIがその部分を創作します。
+これが最も多い失敗です。</div>
+      </div>
+    </div>
+  </div>
+  <div style="display:flex; gap:var(--s-3); flex-wrap:wrap">
+    <span class="chip">営業</span><span class="chip">マーケティング・企画</span><span class="chip">人事・採用</span><span class="chip">人事・組織／管理職</span><span class="chip">バックオフィス</span><span class="chip">全職種共通</span>
+  </div>
+  <div class="footline">Appendix</div>
+</section>
+
+<!-- A-01 使い方と職種マップ -->
+<section class="slide" data-title="A-01 使い方と職種マップ">
+  <div class="s-head">
+    <div class="eyebrow"><span class="chip">Appendix</span><span class="label">A-01 / How to use</span></div>
+    <h1 class="s-title">3つのルールと、どこを開くか</h1>
+  </div>
+  <div class="s-body">
+    <div class="split">
+      <table class="t-compact">
+        <thead><tr><th style="width:170px">職種</th><th style="width:110px">主に使う道具</th><th>収録している型</th></tr></thead>
+        <tbody>
+          <tr><td class="table-lead">営業</td><td>両方</td><td>商談前ブリーフ／文面の自己改良ループ &nbsp;<strong>A-02</strong></td></tr>
+          <tr><td class="table-lead">マーケ・企画</td><td>ChatGPT 中心</td><td>ファクトチェック／競合比較と空白地帯 &nbsp;<strong>A-03</strong></td></tr>
+          <tr><td class="table-lead">人事・採用</td><td>両方</td><td>匿名化前処理／バイアス自己監査 &nbsp;<strong>A-04</strong></td></tr>
+          <tr><td class="table-lead">人事・組織／管理職</td><td>両方</td><td>1on1の論点整理／サーベイ自由記述の分析 &nbsp;<strong>A-05</strong></td></tr>
+          <tr><td class="table-lead">バックオフィス</td><td>Copilot 中心</td><td>参照資料限定Q&amp;A／リライト・添削の2段 &nbsp;<strong>A-06</strong></td></tr>
+          <tr><td class="table-lead">全職種共通</td><td>両方</td><td>やりたいこと別テンプレート早見表 &nbsp;<strong>A-07</strong></td></tr>
+        </tbody>
+      </table>
+      <div class="stack-4">
+        <div class="steps steps-tight">
+          <div class="step"><span class="num-badge">1</span><div><div class="step-t">{{ }} を全部埋める</div><div class="step-d">埋め残すと、AIがその部分を創作します。使わない項目は行ごと消す。</div></div></div>
+          <div class="step"><span class="num-badge">2</span><div><div class="step-t">「ないものは書かない」を必ず入れる</div><div class="step-d">「資料に記載がない場合は『記載なし』とだけ答える」。この一行の有無で、返ってくるものの信頼度が変わります。</div></div></div>
+          <div class="step"><span class="num-badge">3</span><div><div class="step-t">評価と修正を1ターンにしない</div><div class="step-d">まず指摘だけ出させ、採用する指摘を選んでから直させる。同時にやると、主張ごと書き換えられます。</div></div></div>
+        </div>
+        <p class="muted-note">
+          出典：社内スキル集（営業 #1–#17／人事 P00–P22／マーケティング P00–P11／汎用テンプレート §0–§20）。掲載プロンプトは原文の要点をそのまま引いています。
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="footline">Appendix / How to use</div><div class="pageno">A-01</div>
+</section>
+
+<!-- A-02 営業 -->
+<section class="slide" data-title="A-02 営業">
+  <div class="s-head">
+    <div class="eyebrow"><span class="chip">Appendix</span><span class="label">A-02 / Sales</span></div>
+    <h1 class="s-title">営業</h1>
+  </div>
+  <div class="s-body">
+    <div class="split">
+      <div class="prompt-set">
+        <span class="chip">1. 商談前ブリーフ ─ 事実を調べさせず、調べる項目を作らせる</span>
+        <div class="prompt prompt-lean prompt-dense">明日の商談に向けたブリーフを作成してください。
+
+#相手企業（私が確認済みの情報のみ）
+- 業種 / 規模 / 地域：{{ }}
+- 面談相手の部署・役職：{{ }}
+- 公開情報から分かっていること：{{無ければ「未確認」}}
+- これまでの接触：{{資料DL、過去商談の要点}}
+
+#出力
+1. 確認済み事実の整理（ここに新しい事実を足さない）
+2. 業界一般の仮説5つ。各々に「商談で確かめる質問」を1つ
+3. 要確認リスト（調べ方とセットで最大5つ）
+4. 地雷（言うと印象を損ねる可能性のある発言3つ）
+
+#制約
+- 「確認済み事実」に無い企業固有の事実（数値・取り組み名・
+  人名）を一切生成しない。仮説は断定形を使わない</div>
+      </div>
+      <div class="stack-4">
+        <div class="prompt-set">
+          <span class="chip">2. 文面の自己改良ループ</span>
+          <div class="prompt prompt-lean prompt-dense">以下の営業メールを自己評価し、改訂版を出してください。
+
+#手順（この順で必ず出力）
+1. 5観点×20点で採点（件名／冒頭2行／提供価値／
+   証拠／CTA）と減点理由
+2. 減点の大きい3点を、直し方とセットで
+3. 改訂版。文字数は元の文面以下に収めること
+4. 再採点。95点以上を付けるなら、それでも残る
+   減点候補を必ず1つ挙げる
+
+#制約
+- 敬語を増やして丁寧にするだけの修正は改善とみなさない
+- 元の文面にない実績・数値・顧客名を追加しない</div>
+        </div>
+        <div class="card card-tight">
+          <span class="label">Note ─ 提案書骨子（#9）</span>
+          <p class="body-note" style="margin-top:var(--s-2)">
+            7章立て＋自己採点100点ループ。第1章「現状認識」を<strong>ヒアリング発言の引用だけ</strong>で書けないなら、
+            作り直すのは提案書ではなく商談です。
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footline">Appendix / Sales</div><div class="pageno">A-02</div>
+</section>
+
+<!-- A-03 マーケティング・企画 -->
+<section class="slide" data-title="A-03 マーケティング・企画">
+  <div class="s-head">
+    <div class="eyebrow"><span class="chip">Appendix</span><span class="label">A-03 / Marketing</span></div>
+    <h1 class="s-title">マーケティング・企画</h1>
+  </div>
+  <div class="s-body">
+    <div class="split">
+      <div class="prompt-set">
+        <span class="chip">1. ファクトチェック ─ 必ず別チャットで実行する</span>
+        <div class="prompt prompt-lean prompt-dense">あなたはファクトチェッカーです。以下を検証対象として扱い、
+内容を擁護せず批判的に点検してください。
+
+#依頼
+1. 「事実主張」だけを抽出し番号付きリストに。事実主張とは
+   数値・固有名詞・年次・順位・因果関係を含む検証可能な文。
+   意見・推奨・一般論は除外
+2. 各主張を表に。列は 主張 / 検証に必要な一次情報 /
+   確認先 / 判定（検証可能・出典不明・検証不能）/
+   誤っていた場合の事業判断への影響（大中小）
+3. 「出典不明 かつ 影響大」を優先度順に並べ、検証するまで
+   意思決定に使ってはいけない旨を明記
+4. 調査会社レポート名・統計名は実在の自信度を添え、
+   中以下は捏造の可能性が高いと警告
+
+#制約
+- 「概ね正しいと思われます」のような曖昧な判定は禁止
+- 検証していないものを「正しい」と判定しない</div>
+      </div>
+      <div class="stack-4">
+        <div class="prompt-set">
+          <span class="chip">2. 競合比較表と空白地帯の特定</span>
+          <div class="prompt prompt-lean prompt-dense">この市場の競合を「直接競合3社」「間接競合2社」
+「代替手段2つ」に分けて挙げ、表にして。
+列は 区分 / 名称 / 提供価値 / 主なターゲット /
+価格帯 / 強み / 弱み・未対応領域 / 数値情報の確度
+
+#制約
+- 「弱み」は【構造的な制約】か【単なる未着手】かを
+  区別して書く。狙うべきは前者
+- 売上・シェア等の数値は出典を併記。特定できない
+  場合は「非公開」と書く。推測値を書かない
+- 「代替手段：何もしない」を必ず含める</div>
+        </div>
+        <div class="card card-tight">
+          <span class="label">Caution</span>
+          <p class="body-note" style="margin-top:var(--s-2)">
+            競合の<strong>売上・シェア・ユーザー数は捏造率が高い</strong>。企業名と提供内容までは使えますが、数値はIR資料等で必ず確認してください。
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footline">Appendix / Marketing</div><div class="pageno">A-03</div>
+</section>
+
+<!-- A-04 人事・採用 -->
+<section class="slide" data-title="A-04 人事・採用">
+  <div class="s-head">
+    <div class="eyebrow"><span class="chip">Appendix</span><span class="label">A-04 / Recruiting</span></div>
+    <h1 class="s-title">人事・採用</h1>
+  </div>
+  <div class="s-body">
+    <div class="split">
+      <div class="prompt-set">
+        <span class="chip">1. 匿名化前処理 ─ 選考評価にかける前に</span>
+        <div class="prompt prompt-lean prompt-dense">#命令
+以下のテキストから、選考評価・分析に不要な個人識別情報を除去し、匿名化版を出力してください。
+
+#除去・置換ルール
+- 氏名 → 「{{候補者ID}}」に置換（読み仮名・ローマ字も）
+- 生年月日・年齢／性別を示す記述／住所 → 削除
+- 連絡先・SNS・個人URL／顔写真への言及 → 削除
+- 国籍・本籍・出身地・出身校名 → 削除（学部・専攻は残す）
+- 家族構成・扶養／傷病・障害・妊娠出産・育児介護 → 削除
+- 在籍企業名 → 「A社（業界／従業員規模）」に一般化
+- 業務内容・実績数値・使用ツール・保有資格 → そのまま残す
+
+#出力指示
+1. 匿名化済みテキスト
+2. 除去した項目の一覧（項目名のみ。値そのものは出力しない）
+3. 判断に迷い、要確認の箇所</div>
+      </div>
+      <div class="stack-4">
+        <div class="prompt-set">
+          <span class="chip">2. バイアス自己監査 ─ 四半期に一度</span>
+          <div class="prompt prompt-lean prompt-dense">以下の「評価出力」を検査し、JDに記載のない評価軸や、
+属性に基づく推測が混入していないか指摘して。
+
+#検査観点
+1. JDの必須・歓迎要件にない評価軸が使われていないか
+2. 性別・年齢・国籍・出身校・家族構成・傷病等への言及や推測
+3. 就業の空白期間そのものを不利に扱っていないか
+4. 経歴の「書き方の巧拙」を能力と混同していないか
+5. 「記載なし」と「経験なし」を混同していないか
+
+#出力指示
+該当箇所（原文引用）/ 観点番号 / なぜ問題か / 修正案
+の表。問題が無ければ「指摘なし」と明記</div>
+        </div>
+        <div class="card card-tight">
+          <span class="label">Check</span>
+          <p class="body-note" style="margin-top:var(--s-2)">
+            <strong>氏名だけを変えた同一経歴</strong>を2〜3パターン流し、出力が変わらないことも確認する。
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footline">Appendix / Recruiting</div><div class="pageno">A-04</div>
+</section>
+
+<!-- A-05 人事・組織／管理職 -->
+<section class="slide" data-title="A-05 人事・組織／管理職">
+  <div class="s-head">
+    <div class="eyebrow"><span class="chip">Appendix</span><span class="label">A-05 / People &amp; Managers</span></div>
+    <h1 class="s-title">人事・組織／管理職</h1>
+  </div>
+  <div class="s-body">
+    <div class="split">
+      <div class="prompt-set">
+        <span class="chip">1. サーベイ自由記述の分析 ─ カテゴリを先に決めない</span>
+        <div class="prompt prompt-lean prompt-dense">#手順
+1. 回答を読み、内容に基づいてカテゴリを抽出する
+   （カテゴリは事前に指定せず、記述から立ち上げる）
+2. 各カテゴリの件数を集計し、要旨を示す（原文を引用せず、
+   複数人に共通する内容を言い換えて記述）
+3. 件数が2件以下は「少数意見」として別枠に全件列挙する
+   （要約や統合をしない）
+4. 「深刻度（高中低）×件数」で整理
+5. この分析からは判断できない事項を列挙
+
+#制約事項
+- 原文に書かれていない原因・背景を推測しない
+- 個人が特定される記述は要旨に含めない
+- ハラスメント・差別・違法行為・安全上の危険を示唆する
+  記述は集計に混ぜず、件数のみ冒頭に出し、内容は
+  記載せず規定の窓口へ連携が必要と明記する</div>
+      </div>
+      <div class="stack-4">
+        <div class="prompt-set">
+          <span class="chip">2. 1on1の論点整理 ─ 評価はさせない</span>
+          <div class="prompt prompt-lean prompt-dense">あなたは1on1の準備を支援するアシスタントです。
+評価や人事判断は行いません。
+
+#出力指示
+1. 前回からの差分（進んだ／止まっている／新しく出た）
+2. 前回合意したアクションの状況と、障害
+3. 今回話すべき論点（3つまで。優先順と理由）
+4. 論点ごとの問いかけ案（各2つ。詰問にならない言い回し）
+5. 今回は扱わないほうがよい話題と、その理由
+
+#制約事項
+- 本人の記述に無い内容を推測で補わない
+- 性格・資質・適性を評価しない。行動と成果物に限定
+- 論点は「本人が次の2週間で動かせるもの」に絞る</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footline">Appendix / People &amp; Managers</div><div class="pageno">A-05</div>
+</section>
+
+<!-- A-06 バックオフィス -->
+<section class="slide" data-title="A-06 バックオフィス（総務・法務・経理）">
+  <div class="s-head">
+    <div class="eyebrow"><span class="chip">Appendix</span><span class="label">A-06 / Back Office</span></div>
+    <h1 class="s-title">バックオフィス（総務・法務・経理）</h1>
+  </div>
+  <div class="s-body">
+    <div class="split">
+      <div class="prompt-set">
+        <span class="chip">1. 参照資料限定Q&amp;A ─ 嘘をつかせたくない場面の基本形</span>
+        <div class="prompt prompt-lean prompt-dense">#命令
+以下の「参照資料」のみに基づいて、私の質問に回答して
+ください。
+
+#参照資料
+{{規程・ガイドライン・仕様書を貼る}}
+
+#回答の絶対ルール
+- 参照資料に書かれている内容のみを根拠とすること。
+  一般常識・他社事例・推測で補わないこと
+- 回答には必ず、根拠となる箇所を原文のまま引用すること
+- 記載が無い場合は「参照資料に記載なし」とだけ回答する
+- 記述が曖昧または矛盾している場合は指摘し、どう解釈
+  しうるかを両論併記する
+
+#出力形式
+【回答】結論を2文以内
+【根拠】資料からの引用（「」で囲む）
+【備考】解釈の余地・確認が必要な点。無ければ「なし」</div>
+      </div>
+      <div class="stack-4">
+        <div class="prompt-set">
+          <span class="chip">2. リライト・添削 ─ 必ず2ターンに分ける</span>
+          <div class="prompt prompt-lean prompt-dense">【ターン1｜指摘のみ】
+以下の文書をレビューし、修正はせずに問題点だけを
+列挙してください。読み手は{{ }}、目的は{{ }}。
+出力は4列の表のみ：No / 該当箇所（原文引用）/
+問題の種類 / 修正方針
+種類は「事実の不明瞭さ／論理の飛躍／冗長／語調の
+不一致／体裁」で分類。重要度順、最大10件。
+
+【ターン2｜採用分のみ反映】
+上記のうち No.{{ }} のみを反映して全文書き直して。
+指摘していない箇所は原文のまま。元の主張・結論を
+変えない。数値・固有名詞・日付は一切変更しない。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footline">Appendix / Back Office</div><div class="pageno">A-06</div>
+</section>
+
+<!-- A-07 テンプレート早見表 -->
+<section class="slide" data-title="A-07 テンプレート早見表">
+  <div class="s-head">
+    <div class="eyebrow"><span class="chip">Appendix</span><span class="label">A-07 / Quick Reference</span></div>
+    <h1 class="s-title">やりたいこと別 テンプレート早見表</h1>
+  </div>
+  <div class="s-body">
+    <div class="cols-2" style="gap:var(--s-6)">
+      <table class="t-compact">
+        <thead><tr><th>やりたいこと</th><th style="width:150px">使う型</th></tr></thead>
+        <tbody>
+          <tr><td>何から書けばいいか分からない</td><td>情報整理 → 骨格</td></tr>
+          <tr><td>既にある文書を直す</td><td>リライト2段（A-06）</td></tr>
+          <tr><td>メモを文書にする</td><td>議事録／定型帳票</td></tr>
+          <tr><td>メールを書く</td><td>国内／海外（設計→英訳）</td></tr>
+          <tr><td>契約書・規程の叩き台</td><td>NDAドラフト</td></tr>
+          <tr><td>話し言葉・応対の台本</td><td>トークスクリプト（分岐つき）</td></tr>
+          <tr><td>案を出す</td><td>発散→収束 → ネーミング → 広告文</td></tr>
+        </tbody>
+      </table>
+      <table class="t-compact">
+        <thead><tr><th>やりたいこと</th><th style="width:150px">使う型</th></tr></thead>
+        <tbody>
+          <tr><td>同じ作業を量産する</td><td>変数プロンプト／コマンド搭載</td></tr>
+          <tr><td>入力で処理を変える</td><td>条件分岐プロンプト</td></tr>
+          <tr><td>指示の書き方が分からない</td><td>メタプロンプティング</td></tr>
+          <tr><td>文体を真似させたい</td><td>Few-shot（本編 P.14）</td></tr>
+          <tr><td><strong>嘘をつかせたくない</strong></td><td><strong>参照資料限定Q&amp;A（A-06）</strong></td></tr>
+          <tr><td>会話が続くアプリを作る</td><td>対話型学習／Q&amp;Aボット（本編 P.18）</td></tr>
+          <tr><td>出てきた内容を検証したい</td><td>ファクトチェック（A-03）</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="bubble bubble-tight push">
+      <p class="body-note">
+        迷ったら<strong>「嘘をつかせたくない」から選ぶ</strong>。社内規程・仕様書・契約書に関わる質問は、まず A-06 の参照資料限定Q&amp;A に載せてから始めてください。
+      </p>
+    </div>
+  </div>
+  <div class="footline">Appendix / Quick Reference</div><div class="pageno">A-07</div>
+</section>
+
+<!-- A-08 越えてはいけない線 -->
+<section class="slide" data-title="A-08 越えてはいけない線">
+  <div class="s-head">
+    <div class="eyebrow"><span class="chip">Appendix</span><span class="label">A-08 / Cautions</span></div>
+    <h1 class="s-title">越えてはいけない線</h1>
+  </div>
+  <div class="s-body">
+    <table class="t-compact">
+      <thead><tr><th style="width:180px">場面</th><th style="width:34%">やってはいけないこと</th><th>代わりにこうする</th></tr></thead>
+      <tbody>
+        <tr><td class="table-lead">履歴書・職務経歴書</td><td>原本をそのまま外部AIに貼る</td><td>A-04 の匿名化を、社内承認済み環境で先に通す。AIには「漏れの検出」だけを担わせる</td></tr>
+        <tr><td class="table-lead">書類選考・面接評価</td><td>AIの判定をそのまま合否に使う</td><td>判断は人が行う。四半期に一度 A-04 のバイアス監査をかける</td></tr>
+        <tr><td class="table-lead">1on1・面談</td><td>生の会話記録を本人同意なく入力する</td><td>本人が書いた振り返りシートのみを対象にする。健康・家庭事情の記述は入力から除外</td></tr>
+        <tr><td class="table-lead">サーベイ自由記述</td><td>ハラスメント示唆を集計に混ぜる</td><td>集計から外し、内容は記載せず規定の窓口へ即エスカレーション</td></tr>
+        <tr><td class="table-lead">調査・市場データ</td><td>出てきた統計名や数値を資料に載せる</td><td>A-03 のファクトチェックを<strong>別チャットで</strong>かけ、一次情報に当たる</td></tr>
+        <tr><td class="table-lead">社外秘・未公開情報</td><td>顧客名・未公開の数値を外部AIに貼る</td><td>社内データを扱う仕事は Copilot 側で完結させる（本編 P.12）</td></tr>
+      </tbody>
+    </table>
+    <div class="bubble bubble-tight push">
+      <p class="body-note">
+        この6行は、社内スキル集の各プロンプトに付いている<strong>「注意」の欄</strong>を集めたものです。プロンプト本体より、こちらのほうが事故を防ぎます。
+      </p>
+    </div>
+  </div>
+  <div class="footline">Appendix / Cautions</div><div class="pageno">A-08</div>
+</section>
+
+</div>
+
+<nav class="bar">
+  <button type="button" id="prev">&larr; 前</button>
+  <button type="button" id="next">次 &rarr;</button>
+  <span class="count"><span id="cur">1</span> / <span id="tot">20</span></span>
+  <select id="jump" aria-label="スライドを選ぶ"></select>
+  <span class="hint">&larr; &rarr; / Space</span>
+</nav>
+
+<script>
+(function () {
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var stage = document.getElementById('stage');
+  var bar = document.querySelector('.bar');
+  var cur = document.getElementById('cur');
+  var tot = document.getElementById('tot');
+  var jump = document.getElementById('jump');
+  var i = 0;
+
+  tot.textContent = String(slides.length);
+
+  slides.forEach(function (s, n) {
+    var o = document.createElement('option');
+    o.value = String(n);
+    var no = String(n + 1);
+    while (no.length < 2) { no = '0' + no; }
+    o.textContent = no + '  ' + (s.getAttribute('data-title') || '');
+    jump.appendChild(o);
+  });
+
+  function fit() {
+    var barH = bar.offsetHeight;
+    var k = Math.min((window.innerWidth - 32) / 1280, (window.innerHeight - barH - 32) / 720);
+    document.documentElement.style.setProperty('--k', String(Math.max(k, 0.1)));
+    stage.style.bottom = barH + 'px';
+  }
+
+  function show(n) {
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach(function (s, m) { s.hidden = (m !== i); });
+    cur.textContent = String(i + 1);
+    jump.value = String(i);
+  }
+
+  document.getElementById('prev').addEventListener('click', function () { show(i - 1); });
+  document.getElementById('next').addEventListener('click', function () { show(i + 1); });
+  jump.addEventListener('change', function () { show(Number(jump.value)); });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.target && e.target.tagName === 'SELECT') { return; }
+    if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); show(i + 1); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); show(i - 1); }
+    else if (e.key === 'Home') { show(0); }
+    else if (e.key === 'End') { show(slides.length - 1); }
+  });
+
+  window.addEventListener('resize', fit);
+  fit();
+  show(0);
+})();
+</script>
+</body>
+</html>
