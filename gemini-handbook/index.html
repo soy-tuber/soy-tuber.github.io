@@ -1,0 +1,1104 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gemini 実務活用ハンドブック</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Jost:wght@500;700;800&family=Archivo:wght@500;600;700&display=swap">
+<style>
+/* ============================================================
+   tokens.css 準拠（株式会社アミューズ 統合報告書2024 実測値）
+   原典トークンは一切変更していない。
+   投影用に --t-s-* の6つだけを「追加」している
+   （UI基準16pxでは 1280x720 のスクリーンに対して小さすぎるため）。
+   ============================================================ */
+:root {
+  --c-ink:     #000000;
+  --c-body:    #1F1F1F;
+  --c-mute:    #6E7478;
+  --c-line:    #CBD0D3;
+  --c-surface: #E5EBEE;
+  --c-paper:   #FFFFFF;
+
+  --c-ground:      #000000;
+  --c-ground-ink:  #FFFFFF;
+  --c-ground-mute: #9BA1A5;
+  --c-ground-line: #4A4A4A;
+  --c-cool:        #89B2C9;
+  --c-cool-ink:    #000000;
+  --c-cool-mute:   #28414E;
+
+  --c-accent:     #FDD108;
+  --c-accent-ink: #000000;
+
+  --c-blue:  #376AB3;
+  --c-red:   #E73656;
+  --c-sky:   #51A5DC;
+  --c-green: #92C9A7;
+  --c-teal:  #A2D7D4;
+  --c-lime:  #D8E58D;
+
+  --f-sans: "Noto Sans JP", -apple-system, "Hiragino Kaku Gothic ProN", "Yu Gothic", Meiryo, sans-serif;
+  --f-disp: "Jost", "Noto Sans JP", sans-serif;
+  --f-num:  "Archivo", "Noto Sans JP", Arial, sans-serif;
+  --f-mono: "SFMono-Regular", Menlo, Consolas, "Liberation Mono", "Noto Sans Mono", monospace;
+
+  --t-hero:    3.500rem;
+  --t-display: 2.000rem;
+  --t-h1:      1.500rem;
+  --t-h2:      1.125rem;
+  --t-h3:      0.9375rem;
+  --t-body:    0.9375rem;
+  --t-small:   0.8125rem;
+  --t-label:   0.6875rem;
+
+  /* ---- 追加：投影用の段（screen tier）------------------- */
+  --t-s-hero:  4.500rem;  /* 72px 表紙・単独の巨大数値 */
+  --t-s-title: 2.250rem;  /* 36px スライド見出し */
+  --t-s-h2:    1.500rem;  /* 24px 小見出し・帯 */
+  --t-s-body:  1.0625rem; /* 17px 本文 */
+  --t-s-small: 0.875rem;  /* 14px 補助・プロンプト */
+  --t-s-label: 0.750rem;  /* 12px 欧文ラベル */
+
+  --lh-body:  1.85;
+  --lh-head:  1.40;
+  --lh-tight: 1.05;
+  --ls-head:  0.02em;
+  --ls-label: 0.18em;
+  --ls-disp:  0.06em;
+
+  --s-1: 4px;  --s-2: 8px;  --s-3: 12px; --s-4: 16px;
+  --s-5: 24px; --s-6: 32px; --s-7: 48px; --s-8: 64px;
+
+  --r-0: 0;
+  --r-1: 3px;
+  --r-3: 14px;
+  --r-pill: 999px;
+
+  --bd:       1px solid var(--c-line);
+  --bd-ink:   1px solid var(--c-ink);
+  --rule-dot: 1px dotted var(--c-ink);
+  --sh-overlay: 0 2px 12px rgba(0, 0, 0, 0.16);
+}
+
+/* ---- 土台 ---------------------------------------------- */
+html { font-size: 16px; }
+body {
+  margin: 0;
+  background: var(--c-surface);
+  color: var(--c-body);
+  font-family: var(--f-sans);
+  font-size: var(--t-body);
+  line-height: var(--lh-body);
+  font-feature-settings: "palt" 1;
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3 { color: var(--c-ink); line-height: var(--lh-head); letter-spacing: var(--ls-head); margin: 0; }
+code { font-family: var(--f-mono); }
+
+.label {
+  font-family: var(--f-disp);
+  font-size: var(--t-s-label);
+  font-weight: 700;
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--c-mute);
+}
+.display {
+  font-family: var(--f-disp);
+  font-weight: 800;
+  letter-spacing: var(--ls-disp);
+  text-transform: uppercase;
+  color: var(--c-ink);
+  line-height: var(--lh-tight);
+}
+.band {
+  display: inline-block;
+  background: var(--c-accent); color: var(--c-accent-ink);
+  font-weight: 900; font-size: var(--t-s-h2); line-height: 1.5;
+  padding: var(--s-1) var(--s-3); border-radius: var(--r-1);
+}
+.band-ink {
+  display: inline-block;
+  background: var(--c-ink); color: var(--c-ground-ink);
+  font-weight: 700; font-size: var(--t-s-body); line-height: 1.5;
+  padding: var(--s-1) var(--s-3); border-radius: var(--r-1);
+}
+.chip {
+  display: inline-block;
+  background: var(--c-ink); color: var(--c-ground-ink);
+  font-family: var(--f-disp);
+  font-size: var(--t-s-label); font-weight: 700; letter-spacing: 0.08em;
+  padding: 3px var(--s-2); border-radius: var(--r-1);
+  white-space: nowrap;
+}
+.chip-accent { background: var(--c-accent); color: var(--c-accent-ink); }
+.num-badge {
+  display: inline-flex; align-items: center; justify-content: center;
+  flex: none; width: 28px; height: 28px; border-radius: var(--r-pill);
+  background: var(--c-ink); color: var(--c-ground-ink);
+  font-family: var(--f-num); font-size: var(--t-s-small); font-weight: 700;
+}
+.bubble {
+  position: relative; background: var(--c-paper);
+  border: var(--bd-ink); border-radius: var(--r-3);
+  padding: var(--s-4) var(--s-5);
+}
+.bubble::after {
+  content: ""; position: absolute; left: var(--s-6); bottom: -9px;
+  width: 16px; height: 9px; background: inherit;
+  border-right: var(--bd-ink); border-bottom: var(--bd-ink);
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+}
+.mark { background: linear-gradient(transparent 62%, var(--c-accent) 62%); }
+.panel      { background: var(--c-surface); padding: var(--s-5); border-radius: var(--r-3); }
+.panel-ink  { background: var(--c-ground); color: var(--c-ground-ink); padding: var(--s-5); border-radius: var(--r-3); }
+.card       { background: var(--c-paper); border: var(--bd); border-radius: var(--r-3); padding: var(--s-5); }
+.num { font-family: var(--f-num); font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
+.stat {
+  font-family: var(--f-num); font-variant-numeric: tabular-nums;
+  font-size: var(--t-s-hero); font-weight: 700; line-height: var(--lh-tight);
+  color: var(--c-ink); letter-spacing: -0.02em;
+}
+.stat-unit { font-family: var(--f-sans); font-size: var(--t-s-body); font-weight: 700; margin-left: 2px; }
+
+table { border-collapse: collapse; width: 100%; font-size: var(--t-s-small); }
+th {
+  text-align: left; color: var(--c-mute); font-weight: 700;
+  font-family: var(--f-disp);
+  font-size: var(--t-s-label); letter-spacing: 0.08em; text-transform: uppercase;
+  padding: var(--s-2) var(--s-3); border-bottom: var(--bd-ink);
+}
+td { padding: var(--s-3); border-bottom: var(--rule-dot); color: var(--c-body); vertical-align: top; line-height: 1.7; }
+.table-lead {
+  background: var(--c-ink); color: var(--c-ground-ink);
+  font-weight: 700; font-size: var(--t-s-small);
+  border-bottom: 1px solid var(--c-paper); white-space: nowrap;
+}
+
+/* ============================================================
+   デッキ：1280x720 固定キャンバスをビューポートに合わせて縮尺
+   ============================================================ */
+.stage {
+  position: fixed; left: 0; right: 0; top: 0; bottom: 0;
+  display: grid; place-items: center;
+  overflow: hidden; background: var(--c-surface);
+}
+.slide {
+  width: 1280px; height: 720px; flex: none;
+  box-sizing: border-box; padding: 52px 72px 52px;
+  background: var(--c-paper); color: var(--c-body);
+  display: flex; flex-direction: column; gap: var(--s-5);
+  transform: scale(var(--k, 1)); transform-origin: center center;
+  position: relative; overflow: hidden;
+}
+.slide[hidden] { display: none; }
+.slide.ink { background: var(--c-ground); color: var(--c-ground-mute); }
+.slide.ink h1, .slide.ink h2, .slide.ink h3, .slide.ink .display { color: var(--c-ground-ink); }
+.slide.ink .label { color: var(--c-ground-mute); }
+.slide.ink .chip { background: var(--c-paper); color: var(--c-ink); }
+
+.s-head { display: flex; flex-direction: column; gap: var(--s-3); }
+.eyebrow { display: flex; align-items: center; gap: var(--s-3); }
+.s-title {
+  font-size: var(--t-s-title); font-weight: 900; color: var(--c-ink);
+  text-wrap: balance; line-height: 1.3;
+}
+.s-lead { font-size: var(--t-s-body); color: var(--c-body); max-width: 62em; }
+.s-body { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: var(--s-4); font-size: var(--t-s-body); }
+.pageno {
+  position: absolute; right: 72px; bottom: 26px;
+  font-family: var(--f-num); font-variant-numeric: tabular-nums;
+  font-size: var(--t-s-label); font-weight: 600; color: var(--c-mute);
+}
+.slide.ink .pageno { color: var(--c-ground-mute); }
+.footline {
+  position: absolute; left: 72px; bottom: 26px;
+  font-family: var(--f-disp); font-size: var(--t-s-label); font-weight: 700;
+  letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--c-line);
+}
+.slide.ink .footline { color: var(--c-ground-line); }
+
+.prompt {
+  background: var(--c-surface); border-radius: var(--r-3);
+  padding: var(--s-4) var(--s-5);
+  font-family: var(--f-mono); font-size: var(--t-s-small);
+  line-height: 1.75; color: var(--c-body);
+  white-space: pre-wrap; overflow-wrap: anywhere;
+}
+.prompt-set { display: flex; flex-direction: column; gap: var(--s-3); }
+.prompt-set > .chip { align-self: flex-start; }
+.prompt-lean { padding-top: var(--s-3); padding-bottom: var(--s-3); }
+/* 長いプロンプト全文を1枚に収めるとき。原文は改変せず行送りだけ詰める */
+.prompt-dense { line-height: 1.6; }
+
+.cols-2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-6); align-items: start; }
+.cols-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s-5); align-items: start; }
+.cols-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--s-4); align-items: stretch; }
+.split { display: grid; grid-template-columns: 1.15fr 1fr; gap: var(--s-7); align-items: start; }
+
+.steps { display: flex; flex-direction: column; gap: 0; }
+.step { display: flex; gap: var(--s-4); padding: var(--s-4) 0; border-bottom: var(--rule-dot); }
+.step:last-child { border-bottom: 0; }
+.steps-tight .step { padding: var(--s-3) 0; }
+.step-t { font-weight: 700; color: var(--c-ink); font-size: var(--t-s-body); }
+.step-d { font-size: var(--t-s-small); color: var(--c-body); line-height: 1.8; }
+
+/* カテゴリ色の面（意味の違う4系列を並べるときだけ使う） */
+.cat { border-radius: var(--r-3); padding: var(--s-5); color: var(--c-ink); display: flex; flex-direction: column; gap: var(--s-2); }
+.cat h3 { font-size: var(--t-s-h2); font-weight: 900; }
+.cat p { margin: 0; font-size: var(--t-s-small); line-height: 1.8; }
+.cat .label { color: var(--c-cool-mute); }
+.cat-a { background: var(--c-sky); }
+.cat-b { background: var(--c-teal); }
+.cat-c { background: var(--c-lime); }
+.cat-d { background: var(--c-cool); }
+
+.map { display: grid; grid-template-columns: repeat(5, 1fr); gap: var(--s-4); align-items: stretch; }
+.node {
+  border: var(--bd); border-radius: var(--r-3); padding: var(--s-4);
+  display: flex; flex-direction: column; gap: var(--s-2); min-height: 128px;
+}
+.node .chip { align-self: flex-start; }
+.node p { margin: 0; font-size: var(--t-s-small); color: var(--c-body); line-height: 1.75; }
+.map-hub {
+  display: flex; align-items: center; gap: var(--s-5);
+  border-top: var(--rule-dot); border-bottom: var(--rule-dot);
+  padding: var(--s-4) 0;
+}
+.dotted-link { flex: 1; border-top: var(--rule-dot); }
+
+.ticks { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--s-3); }
+.ticks li { display: flex; gap: var(--s-3); font-size: var(--t-s-body); line-height: 1.75; }
+.ticks li::before { content: "\2014"; color: var(--c-mute); flex: none; }
+.tight li { font-size: var(--t-s-small); }
+
+.accent-card { background: var(--c-accent); border-color: var(--c-accent); }
+.stack { display: flex; flex-direction: column; gap: var(--s-3); }
+.stack-4 { display: flex; flex-direction: column; gap: var(--s-4); }
+.stack-5 { display: flex; flex-direction: column; gap: var(--s-5); }
+.push { margin-top: auto; margin-bottom: var(--s-3); }
+.muted-note { margin: 0; font-size: var(--t-s-small); color: var(--c-mute); line-height: 1.8; }
+.plain-prompt { background: var(--c-paper); padding: 0; font-size: var(--t-s-small); }
+
+/* 操作バー（印刷時は非表示） */
+.bar {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 10;
+  display: flex; align-items: center; gap: var(--s-3);
+  padding: var(--s-2) var(--s-4);
+  background: var(--c-paper); border-top: var(--bd);
+}
+.bar button, .bar select {
+  font-family: var(--f-sans); font-size: var(--t-small); font-weight: 700;
+  padding: var(--s-1) var(--s-4); border: var(--bd-ink); border-radius: var(--r-1);
+  background: var(--c-paper); color: var(--c-ink); cursor: pointer; line-height: 1.6;
+}
+.bar select { flex: 1; min-width: 0; font-weight: 400; }
+.bar button:focus-visible, .bar select:focus-visible { outline: 2px solid var(--c-ink); outline-offset: 2px; }
+.bar .count {
+  font-family: var(--f-num); font-variant-numeric: tabular-nums;
+  font-size: var(--t-small); font-weight: 700; color: var(--c-ink);
+}
+.bar .hint {
+  font-size: var(--t-label); color: var(--c-mute); letter-spacing: var(--ls-label);
+  text-transform: uppercase; font-family: var(--f-disp); font-weight: 700;
+}
+
+@media print {
+  @page { size: 1280px 720px; margin: 0; }
+  body { background: var(--c-paper); }
+  .bar { display: none; }
+  .stage { position: static; display: block; overflow: visible; }
+  .slide { display: flex !important; transform: none !important; break-after: page; page-break-after: always; }
+  .slide:last-child { break-after: auto; page-break-after: auto; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+</head>
+<body>
+
+<div class="stage" id="stage">
+
+<!-- 01 表紙 -->
+<section class="slide" data-title="表紙">
+  <div class="s-head" style="gap:var(--s-4)">
+    <span class="label">Seminar / 60 min</span>
+    <div class="display" style="font-size:var(--t-s-title)">Gemini &times; Google Workspace</div>
+  </div>
+  <div class="s-body" style="justify-content:center; gap:var(--s-6)">
+    <h1 style="font-size:var(--t-s-hero); font-weight:900; line-height:1.15; letter-spacing:0">
+      <span class="mark">明日の業務</span>が変わる、<br>Gemini の使い方
+    </h1>
+    <p class="s-lead" style="font-size:var(--t-s-h2); color:var(--c-mute); max-width:34em">
+      メール・カレンダー・スプレッドシート・ドライブ。いつも触っている場所から始める、実演20項目。
+    </p>
+  </div>
+  <div style="display:flex; gap:var(--s-7); border-top:var(--bd-ink); padding-top:var(--s-4)">
+    <div><div class="label">Slides</div><div class="stat" style="font-size:var(--t-display)">20</div></div>
+    <div><div class="label">Prompts</div><div class="stat" style="font-size:var(--t-display)">40<span class="stat-unit">+</span></div></div>
+    <div><div class="label">Date</div><div class="stat" style="font-size:var(--t-display)">2026.09</div></div>
+  </div>
+  <div class="footline">Gemini Practical Guide</div>
+</section>
+
+<!-- 02 本日のゴール -->
+<section class="slide" data-title="本日のゴール">
+  <div class="s-head">
+    <div class="eyebrow"><span class="label">Objective</span></div>
+    <h1 class="s-title">この60分で持ち帰っていただくもの</h1>
+  </div>
+  <div class="s-body">
+    <div class="cols-3" style="align-items:stretch">
+      <div class="card stack">
+        <span class="num-badge">1</span>
+        <h2 style="font-size:var(--t-s-h2); font-weight:900">守備範囲がわかる</h2>
+        <p class="muted-note" style="color:var(--c-body)">Gemini に「できること／苦手なこと」の線を引けるようになる。何を任せ、何を自分でやるかの判断がつく状態。</p>
+      </div>
+      <div class="card stack">
+        <span class="num-badge">2</span>
+        <h2 style="font-size:var(--t-s-h2); font-weight:900">自分の業務に接続できる</h2>
+        <p class="muted-note" style="color:var(--c-body)">Gmail・カレンダー・スプレッドシート・ドライブ。すでに毎日開いている画面のどこで効くかが具体的に見える。</p>
+      </div>
+      <div class="card stack accent-card">
+        <span class="num-badge">3</span>
+        <h2 style="font-size:var(--t-s-h2); font-weight:900">明日そのまま使える文がある</h2>
+        <p class="muted-note" style="color:var(--c-body)">スライドに出るプロンプトは全て実物です。コピーして貼れば、今日の続きから同じ結果が出せます。</p>
+      </div>
+    </div>
+    <div class="bubble push">
+      <p style="margin:0; font-size:var(--t-s-body)">
+        今日いちばん覚えて帰っていただきたいのは、機能名ではなく <strong>「頼み方」</strong> です。同じ機能でも、頼み方で結果は別物になります。
+      </p>
+    </div>
+  </div>
+  <div class="footline">Objective</div><div class="pageno">02 / 20</div>
+</section>
+
+<!-- 03 アジェンダ -->
+<section class="slide" data-title="アジェンダ">
+  <div class="s-head">
+    <div class="eyebrow"><span class="label">Agenda</span></div>
+    <h1 class="s-title">本日の進行</h1>
+  </div>
+  <div class="s-body">
+    <table>
+      <thead>
+        <tr><th style="width:104px">Part</th><th style="width:240px">テーマ</th><th>扱う内容</th><th style="width:80px">時間</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="table-lead">PART 1</td>
+          <td><strong>Gemini の現在地</strong></td>
+          <td>できることの全体像／Google Workspace 連携マップ／すべての土台になるプロンプトの基本型</td>
+          <td class="num">10分</td>
+        </tr>
+        <tr>
+          <td class="table-lead">PART 2</td>
+          <td><strong>Workspace 連携</strong></td>
+          <td>Gmail・Googleカレンダー／スプレッドシート／ドライブ／Google検索／マルチモーダル</td>
+          <td class="num">25分</td>
+        </tr>
+        <tr>
+          <td class="table-lead">PART 3</td>
+          <td><strong>ツール活用と Gems</strong></td>
+          <td>Deep Research／Canvas・ガイド付き学習／画像・動画生成／自分専用の Gem をつくる</td>
+          <td class="num">20分</td>
+        </tr>
+        <tr>
+          <td class="table-lead">CLOSE</td>
+          <td><strong>明日からの3ステップ</strong></td>
+          <td>持ち帰って最初にやること／質疑</td>
+          <td class="num">5分</td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="muted-note">※ 画面共有で実演しながら進めます。手元で同じ操作を試していただいて構いません。</p>
+  </div>
+  <div class="footline">Agenda</div><div class="pageno">03 / 20</div>
+</section>
+
+<!-- 04 できることの全体像 -->
+<section class="slide" data-title="Geminiにできること 全体像">
+  <div class="s-head">
+    <div class="eyebrow"><span class="chip">Part 1</span><span class="label">What it does</span></div>
+    <h1 class="s-title">Gemini にできることは、4つに分けると迷わない</h1>
+  </div>
+  <div class="s-body">
+    <div class="cols-4">
+      <div class="cat cat-a">
+        <span class="label">Read</span>
+        <h3>読む・まとめる</h3>
+        <p>長いメール、議事録、PDF、動画。人が読む前に要点を出させる。スレッド全体・複数ファイル横断もここ。</p>
+      </div>
+      <div class="cat cat-b">
+        <span class="label">Find</span>
+        <h3>調べる・比べる</h3>
+        <p>Google検索連携で最新情報を、Deep Research で数十サイトを横断して。比較表・チェックリストの形で出させる。</p>
+      </div>
+      <div class="cat cat-c">
+        <span class="label">Make</span>
+        <h3>つくる</h3>
+        <p>文章、返信文、レポート、グラフ。Nano Banana で画像、Veo 3.1 で動画。Canvas で一緒に書き直す。</p>
+      </div>
+      <div class="cat cat-d">
+        <span class="label">Connect</span>
+        <h3>つなぐ</h3>
+        <p>Gmail・カレンダー・ドライブ・スプレッドシート。自分のデータを踏まえた答えが返る。ここが他のAIとの差。</p>
+      </div>
+    </div>
+    <div class="prompt-set push">
+      <span class="chip">まずはこの一言から</span>
+      <div class="prompt">geminiにできることを教えて</div>
+    </div>
+  </div>
+  <div class="footline">Part 1 / Gemini Today</div><div class="pageno">04 / 20</div>
+</section>
+
+<!-- 05 連携マップ -->
+<section class="slide" data-title="Workspace 連携マップ">
+  <div class="s-head">
+    <div class="eyebrow"><span class="chip">Part 1</span><span class="label">Integration Map</span></div>
+    <h1 class="s-title">どこに、何を頼めるのか</h1>
+  </div>
+  <div class="s-body">
+    <div class="map">
+      <div class="node">
+        <span class="chip">Gmail</span>
+        <p>受信箱を検索して探す・要約する・返信文を書く。スレッド全体を読ませられる。</p>
+      </div>
+      <div class="node">
+        <span class="chip">Calendar</span>
+        <p>空き時間の抽出、候補日程の提示。メール文面に直接埋め込める。</p>
+      </div>
+      <div class="node">
+        <span class="chip">Sheets</span>
+        <p>集計・分析・グラフ作成。Python で実際に計算させられる。</p>
+      </div>
+      <div class="node">
+        <span class="chip">Drive</span>
+        <p>ファイルを探す・横断要約する・フォルダ全体から企画を出させる。</p>
+      </div>
+      <div class="node">
+        <span class="chip">Search</span>
+        <p>最新の外部情報。社外の相場や競合を比較表にする。</p>
+      </div>
+    </div>
+    <div class="map-hub">
+      <div class="dotted-link"></div>
+      <span class="band">Gemini</span>
+      <div class="dotted-link"></div>
+    </div>
+    <div class="cols-2" style="gap:var(--s-6)">
+      <div>
+        <div class="band-ink">連携の勘どころ</div>
+        <ul class="ticks tight" style="margin-top:var(--s-3)">
+          <li>「探して」より <strong>固有名詞</strong>。社名・案件名を入れると命中率が跳ね上がる。</li>
+          <li>1つの依頼で <strong>2つのサービスをまたがせる</strong>と価値が出る（メール＋カレンダー）。</li>
+        </ul>
+      </div>
+      <div>
+        <div class="band-ink">先に知っておくこと</div>
+        <ul class="ticks tight" style="margin-top:var(--s-3)">
+          <li>参照できるのは <strong>自分がアクセス権を持つ範囲</strong>だけ。権限は変わらない。</li>
+          <li>連携可否は管理者設定に依存。使えない場合は情報システム部門へ。</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="footline">Part 1 / Integration Map</div><div class="pageno">05 / 20</div>
+</section>
+
+<!-- 06 プロンプトの基本型 -->
+<section class="slide" data-title="プロンプトの基本型">
+  <div class="s-head">
+    <div class="eyebrow"><span class="chip">Part 1</span><span class="label">The Format</span></div>
+    <h1 class="s-title">今日いちばん大事な1枚 ─ 頼み方の型</h1>
+  </div>
+  <div class="s-body">
+    <div class="split">
+      <div class="prompt-set">
+        <span class="chip">5つの見出しで区切るだけ</span>
+        <div class="prompt prompt-lean prompt-dense">#役割
+あなたは経験豊富なIT導入コンサルタントです。
+
+#命令
+営業管理システムの導入に向けた比較調査を行ってください。
+
+#文脈
+当社は従業員50名規模の日本企業です。
+スプレッドシートでのデータ管理に限界を感じており、低コストかつ使いやすいツールを探しています。
+
+#制約事項
+- 日本国内でサポートがある製品
+- 2024年以降の最新情報
+- 費用が不明な場合は空欄にせず「要問い合わせ」と記載
+
+#出力指示
+以下の列項目で比較表を作成してください。
+- 製品名 / 初期費用 / 月額費用 / 特徴 / 導入事例URL</div>
+      </div>
+      <div class="stack-4">
+        <div class="steps steps-tight">
+          <div class="step"><span class="num-badge">1</span><div><div class="step-t">#役割</div><div class="step-d">誰として答えるか。専門家を指定すると語彙と観点が変わる。</div></div></div>
+          <div class="step"><span class="num-badge">2</span><div><div class="step-t">#命令</div><div class="step-d">やってほしいことを一文で。ここだけ書いて出すのが「ふつうの使い方」。</div></div></div>
+          <div class="step"><span class="num-badge">3</span><div><div class="step-t">#文脈</div><div class="step-d">自社の状況。ここを書くと一般論が自分ごとの答えになる。</div></div></div>
+          <div class="step"><span class="num-badge">4</span><div><div class="step-t">#制約事項</div><div class="step-d">やってほしくないことを先に潰す。<span class="mark">やり直し回数がいちばん減るのはここ</span>。</div></div></div>
+          <div class="step"><span class="num-badge">5</span><div><div class="step-t">#出力指示</div><div class="step-d">表なのか箇条書きなのか。列名まで指定すると再利用できる形で返る。</div></div></div>
+        </div>
+        <p class="muted-note">全部書く必要はありません。うまくいかないときに、足りていない見出しを1つ足す。それだけで直ります。</p>
+      </div>
+    </div>
+  </div>
+  <div class="footline">Part 1 / The Format</div><div class="pageno">06 / 20</div>
+</section>
+
+<!-- 07 PART 2 章扉 -->
+<section class="slide ink" data-title="── PART 2 章扉">
+  <div class="s-head">
+    <div class="eyebrow"><span class="chip">Part 2</span><span class="label">25 min</span></div>
+  </div>
+  <div class="s-body" style="justify-content:center; gap:var(--s-5)">
+    <div class="display" style="font-size:var(--t-s-hero)">Google<br>Workspace</div>
+    <h2 style="font-size:var(--t-s-h2); font-weight:700; max-width:30em; line-height:1.8">
+      いつもの受信箱、いつものシート、いつものドライブ。<br>
+      <span style="color:var(--c-accent)">新しい画面を開かずに</span>効くところから見ていきます。
+    </h2>
+  </div>
+  <div style="display:flex; gap:var(--s-3); flex-wrap:wrap">
+    <span class="chip">Gmail</span><span class="chip">Calendar</span><span class="chip">Sheets</span><span class="chip">Drive</span><span class="chip">Search</span><span class="chip">Multimodal</span>
+  </div>
+  <div class="footline">Part 2</div><div class="pageno">07 / 20</div>
+</section>
+
+<!-- 08 Gmail 要約 -->
+<section class="slide" data-title="Gmail ─ 探す・要約する">
+  <div class="s-head">
+    <div class="eyebrow"><span class="chip">Part 2</span><span class="label">Gmail</span></div>
+    <h1 class="s-title">受信箱を「読む」前に、要点だけ受け取る</h1>
+  </div>
+  <div class="s-body">
+    <div class="split">
+      <div class="prompt-set">
+        <span class="chip">Step 1 ─ 探す</span>
+        <div class="prompt prompt-lean">株式会社テストからの、追加開発の見積もりメールの件名を教えて</div>
+        <span class="chip">Step 2 ─ 経緯をつかむ</span>
+        <div class="prompt prompt-lean">株式会社テストとのやり取りを時系列で要約してまとめて</div>
+        <span class="chip">Step 3 ─ 型に落とす</span>
+        <div class="prompt prompt-lean">このメール文を以下の項目ごとに要約して
+（埋められない項目は未記載でOK）
+
+- 結論
+- 背景
+- 課題
+- 依頼
+- 期限
+- 次のアクション</div>
+      </div>
+      <div class="stack-5">
+        <div class="panel">
+          <div class="band">項目を指定するのが肝</div>
+          <p class="muted-note" style="color:var(--c-body); margin-top:var(--s-3)">
+            「要約して」だけだと、毎回ちがう形で返ってきます。<strong>項目を固定する</strong>と、案件が変わっても同じ形で溜まる。転記も、他人への共有も楽になります。
+          </p>
+          <p class="muted-note" style="color:var(--c-body); margin-top:var(--s-3)">
+            <strong>「埋められない項目は未記載でOK」</strong>の一行が効きます。これがないと、書いていないことを推測で埋めてきます。
+          </p>
+        </div>
+        <div>
+          <div class="band-ink">スレッドが長いとき</div>
+          <ul class="ticks tight" style="margin-top:var(--s-3)">
+            <li>全体を掴む → <code>このスレッドを要約して</code></li>
+            <li>直近だけ知りたい → <code>スレッド内の情報を基に、最新のメール文を要約して</code></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footline">Part 2 / Gmail</div><div class="pageno">08 / 20</div>
+</section>
+
+<!-- 09 Gmail × Calendar -->
+<section class="slide" data-title="Gmail × カレンダー ─ 返信と日程">
+  <div class="s-head">
+    <div class="eyebrow"><span class="chip">Part 2</span><span class="label">Gmail &times; Calendar</span></div>
+    <h1 class="s-title">返信文と日程調整を、ひとつの依頼で終わらせる</h1>
+  </div>
+  <div class="s-body">
+    <div class="split">
+      <div class="prompt-set">
+        <span class="chip">まずは素直に</span>
+        <div class="prompt">スレッド内の情報を基に、返信文を作成して</div>
+        <span class="chip chip-accent">ここからが本題 ─ カレンダーをまたがせる</span>
+        <div class="prompt">返信文を作成してください。その際、本日から平日の５営業日以内、10時から19時の間で、前後の予定との空き時間が長い時間帯をGoogleカレンダーで検索し、１時間のオンラインMTGの候補日程を３つ提示してください。</div>
+      </div>
+      <div class="stack-5">
+        <div class="bubble">
+          <p style="margin:0; font-size:var(--t-s-small); line-height:1.85">
+            この一文には、条件が<strong>6つ</strong>入っています。<br>
+            ①本日から ②平日5営業日以内 ③10〜19時 ④前後の空きが長い時間帯 ⑤1時間 ⑥3候補。
+          </p>
+        </div>
+        <div class="steps">
+          <div class="step"><span class="num-badge">1</span><div><div class="step-t">条件は多いほどいい</div><div class="step-d">遠慮して曖昧にするほど、確認と手直しが増えます。人に頼むときと同じで、細かく言った方が早い。</div></div></div>
+          <div class="step"><span class="num-badge">2</span><div><div class="step-t">「候補を3つ」と数を指定する</div><div class="step-d">数を言わないと1つしか出ないことがあります。相手に選ばせる形式まで指定する。</div></div></div>
+          <div class="step"><span class="num-badge">3</span><div><div class="step-t">送信前に必ず自分で読む</div><div class="step-d">予定の見落とし・敬語の相性は人が最終確認。下書きまでを任せる、が現実的な線です。</div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footline">Part 2 / Gmail &times; Calendar</div><div class="pageno">09 / 20</div>
+</section>
+
+<!-- 10 スプレッドシート 4ステップ -->
+<section class="slide" data-title="スプレッドシート ─ 分析の4ステップ">
+  <div class="s-head">
+    <div class="eyebrow"><span class="chip">Part 2</span><span class="label">Sheets</span></div>
+    <h1 class="s-title">分析は「観点を考えさせる」ところから頼む</h1>
+  </div>
+  <div class="s-body">
+    <div class="split">
+      <div class="steps">
+        <div class="step"><span class="num-badge">1</span><div><div class="step-t">データを理解させる</div><div class="step-d"><code>このデータ群の特徴を整理して教えて</code><br>列の意味・期間・件数を先に言わせる。ここでズレていたら、後の数字は全部信用できません。</div></div></div>
+        <div class="step"><span class="num-badge">2</span><div><div class="step-t">観点を出させる</div><div class="step-d"><code>データ群の特徴を基に、集計・分析観点を考えて</code><br><span class="mark">自分が思いつかなかった切り口</span>が出てくる。ここを飛ばすと、いつもの集計しか出ません。</div></div></div>
+        <div class="step"><span class="num-badge">3</span><div><div class="step-t">見る</div><div class="step-d">グラフの種類まで指定して可視化させる（次ページ）。</div></div></div>
+        <div class="step"><span class="num-badge">4</span><div><div class="step-t">打ち手にする</div><div class="step-d"><code>より売り上げを伸ばすための課題と発生要因を特定し、対策案を提示してください。</code></div></div></div>
+      </div>
+      <div class="stack-5">
+        <div class="panel">
+          <div class="band-ink">深掘りの質問例</div>
+          <ul class="ticks tight" style="margin-top:var(--s-3)">
+            <li>デバイス（Mobile/PC）によって、購買行動や商品カテゴリに違いがあるか？</li>
+            <li>顧客IDごとに、注文回数と総売上を表形式で出力して</li>
+          </ul>
+        </div>
+        <div class="card">
+          <span class="label">Check</span>
+          <p class="muted-note" style="color:var(--c-body); margin-top:var(--s-2)">
+            数字が合わないときは <strong>「Pythonで計算して」</strong>と付け加える。頭の中で概算されるのを防ぎ、実際に計算させられます。
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footline">Part 2 / Sheets</div><div class="pageno">10 / 20</div>
+</section>
+
+<!-- 11 スプレッドシート グラフとレポート -->
+<section class="slide" data-title="スプレッドシート ─ グラフとレポート">
+  <div class="s-head">
+    <div class="eyebrow"><span class="chip">Part 2</span><span class="label">Sheets / Output</span></div>
+    <h1 class="s-title">グラフは種類を指定する。最後はレポートの形で受け取る</h1>
+  </div>
+  <div class="s-body">
+    <table>
+      <thead><tr><th style="width:130px">知りたいこと</th><th style="width:110px">グラフ</th><th>そのまま使えるプロンプト</th></tr></thead>
+      <tbody>
+        <tr><td class="table-lead">構成比較</td><td>棒グラフ</td><td>どのカテゴリ/サブカテゴリが最も売り上げに貢献しているかを、棒グラフを使って説明して</td></tr>
+        <tr><td class="table-lead">時間の変化</td><td>折れ線</td><td>日次の売上推移を折れ線グラフで示して</td></tr>
+        <tr><td class="table-lead">内訳の割合</td><td>円グラフ</td><td>支払方法の割合を示す円グラフを作って</td></tr>
+      </tbody>
+    </table>
+    <div class="split">
+      <div class="prompt-set">
+        <span class="chip chip-accent">仕上げ ─ 報告の形にする</span>
+        <div class="prompt">以下の項目を含む、「2024年1月 販売実績サマリ」のレポートを出力してください。
+- 販売データの集計結果（特徴や傾向）
+- 複数観点からの分析に基づくアクション案</div>
+      </div>
+      <div>
+        <div class="band-ink">レポート依頼のコツ</div>
+        <ul class="ticks tight" style="margin-top:var(--s-3)">
+          <li><strong>タイトルを先に決めて渡す。</strong>「2024年1月 販売実績サマリ」と名前がつくと、粒度と範囲が自動的に定まります。</li>
+          <li><strong>「集計結果」と「アクション案」を分けて指定する。</strong>片方だけだと、事実の羅列か、根拠のない提案のどちらかに寄ります。</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="footline">Part 2 / Sheets</div><div class="pageno">11 / 20</div>
+</section>
+
+<!-- 12 ドライブ -->
+<section class="slide" data-title="Googleドライブ ─ 探す→要約→企画">
+  <div class="s-head">
+    <div class="eyebrow"><span class="chip">Part 2</span><span class="label">Drive</span></div>
+    <h1 class="s-title">ファイル名を覚えていなくても、探せる</h1>
+  </div>
+  <div class="s-body">
+    <div class="cols-3" style="align-items:stretch">
+      <div class="card stack">
+        <span class="chip">Step 1 ─ 探す</span>
+        <div class="prompt plain-prompt">既存サービスの改善方針が書かれた資料を探して</div>
+        <p class="muted-note">ファイル名ではなく <strong>中身の内容</strong>で探せるのが従来の検索との違い。「〜が書かれた資料」という言い方をする。</p>
+      </div>
+      <div class="card stack">
+        <span class="chip">Step 2 ─ 読む</span>
+        <div class="prompt plain-prompt">複数ファイルの議事録内容を要約して</div>
+        <p class="muted-note">1ファイルずつ開かずに横断要約。「開発ロードマップの内容を教えて」のように、資料名で直接聞くこともできる。</p>
+      </div>
+      <div class="card stack accent-card">
+        <span class="chip">Step 3 ─ 生み出す</span>
+        <div class="prompt plain-prompt" style="background:transparent">このフォルダ内の全ファイル内容を基に、新規サービスの企画案を考えて</div>
+        <p class="muted-note" style="color:var(--c-body)">ここが本命。<strong>資料が散らばっているほど効く。</strong>人間には読み切れない量を前提にした使い方。</p>
+      </div>
+    </div>
+    <div class="bubble push">
+      <p style="margin:0; font-size:var(--t-s-body); line-height:1.85">
+        ドライブが散らかっているのは、実は不利ではありません。<strong>整理する前に、まとめて読ませてしまう。</strong>整理は、そのあとで十分です。
+      </p>
+    </div>
+  </div>
+  <div class="footline">Part 2 / Drive</div><div class="pageno">12 / 20</div>
+</section>
+
+<!-- 13 Google検索連携 -->
+<section class="slide" data-title="Google検索連携 ─ 比較表">
+  <div class="s-head">
+    <div class="eyebrow"><span class="chip">Part 2</span><span class="label">Google Search</span></div>
+    <h1 class="s-title">社外の情報は「比較表で出して」と頼む</h1>
+  </div>
+  <div class="s-body">
+    <div class="split">
+      <div class="prompt-set">
+        <span class="chip">1回目</span>
+        <div class="prompt">GeminiとChatGPTの機能の比較表を、様々なWebサイトの情報を基に日本語で出力して</div>
+        <span class="chip">2回目 ─ 会話を続ける</span>
+        <div class="prompt">もっと深掘りしたものを、日本語で出力して</div>
+        <p class="muted-note">
+          一発で完成させようとしない。<strong>1回目は粗くていい</strong>。返ってきたものを見てから注文をつける方が、はるかに速く目的地に着きます。
+        </p>
+      </div>
+      <div class="stack-5">
+        <div class="panel">
+          <div class="band">この2語を必ず入れる</div>
+          <ul class="ticks tight" style="margin-top:var(--s-3)">
+            <li><strong>「様々なWebサイトの情報を基に」</strong>単一ソースの受け売りを避け、複数を突き合わせさせる。</li>
+            <li><strong>「日本語で」</strong>海外ソースを読みに行った結果、英語で返ってくるのを防ぐ。</li>
+          </ul>
+        </div>
+        <div class="card">
+          <span class="label">Caution</span>
+          <p class="muted-note" style="color:var(--c-body); margin-top:var(--s-2)">
+            価格・料金プラン・製品名は<strong>変わります</strong>。表が出てきたら、社外に出す前に出典リンクを1つは自分で開いて確認する。ここは省略しないでください。
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footline">Part 2 / Google Search</div><div class="pageno">13 / 20</div>
+</section>
+
+<!-- 14 マルチモーダル -->
+<section class="slide" data-title="マルチモーダル ─ 写真・画像・動画">
+  <div class="s-head">
+    <div class="eyebrow"><span class="chip">Part 2</span><span class="label">Multimodal</span></div>
+    <h1 class="s-title">文字にしなくていい。撮って渡す</h1>
+  </div>
+  <div class="s-body">
+    <table>
+      <thead><tr><th style="width:170px">渡すもの</th><th style="width:190px">用途</th><th>プロンプト</th></tr></thead>
+      <tbody>
+        <tr><td class="table-lead">ホワイトボードの写真</td><td>会議のあと、その場で</td><td>添付のホワイトボードに記載の内容を基に、会議の議事録を作成してください</td></tr>
+        <tr><td class="table-lead">バナー画像</td><td>制作物のレビュー</td><td>添付の広告用バナー画像について、より多くの人にクリックしてもらうために修正すべき点を指摘して</td></tr>
+        <tr><td class="table-lead">資料のPDF</td><td>提出前チェック</td><td>添付の資料について、誤字脱字があれば指摘して</td></tr>
+        <tr><td class="table-lead">動画ファイル</td><td>海外セミナーの消化</td><td>以下の動画を日本語に翻訳して文字起こしし、ポイントを絞って要約して</td></tr>
+      </tbody>
+    </table>
+    <div class="bubble push">
+      <p style="margin:0; font-size:var(--t-s-body); line-height:1.85">
+        手書きの文字も、斜めから撮った写真も読みます。<strong>「あとで清書しよう」と思った時点で、渡してしまう。</strong>持ち帰って清書する作業が、いちばん先に消えます。
+      </p>
+    </div>
+  </div>
+  <div class="footline">Part 2 / Multimodal</div><div class="pageno">14 / 20</div>
+</section>
+
+<!-- 15 PART 3 章扉 -->
+<section class="slide ink" data-title="── PART 3 章扉">
+  <div class="s-head">
+    <div class="eyebrow"><span class="chip">Part 3</span><span class="label">20 min</span></div>
+  </div>
+  <div class="s-body" style="justify-content:center; gap:var(--s-5)">
+    <div class="display" style="font-size:var(--t-s-hero)">Tools<br>&amp; Gems</div>
+    <h2 style="font-size:var(--t-s-h2); font-weight:700; max-width:30em; line-height:1.8">
+      ここからは「使う」から「<span style="color:var(--c-accent)">仕込む</span>」へ。<br>
+      一度つくれば、明日以降ずっと効き続けるものを扱います。
+    </h2>
+  </div>
+  <div style="display:flex; gap:var(--s-3); flex-wrap:wrap">
+    <span class="chip">Deep Research</span><span class="chip">Canvas</span><span class="chip">Guided Learning</span><span class="chip">Nano Banana</span><span class="chip">Veo 3.1</span><span class="chip">Gems</span>
+  </div>
+  <div class="footline">Part 3</div><div class="pageno">15 / 20</div>
+</section>
+
+<!-- 16 Deep Research -->
+<section class="slide" data-title="Deep Research ─ 調査を任せる">
+  <div class="s-head">
+    <div class="eyebrow"><span class="chip">Part 3</span><span class="label">Deep Research</span></div>
+    <h1 class="s-title">調査計画を「直せる」のが、ふつうの検索との違い</h1>
+  </div>
+  <div class="s-body">
+    <div class="split">
+      <div class="steps">
+        <div class="step"><span class="num-badge">1</span><div><div class="step-t">依頼する</div><div class="step-d"><code>営業管理システムの導入に向けた比較調査を行って</code><br>ここで <strong>いきなり調査は始まりません</strong>。まず「リサーチプラン」が提示されます。</div></div></div>
+        <div class="step"><span class="num-badge">2</span><div><div class="step-t">プランを直す</div><div class="step-d"><code>選定チェックリストも出力するプランに変更して</code><br><span class="mark">ここが最重要</span>。調査が走ってから直すと数十分が無駄になります。走らせる前に直す。</div></div></div>
+        <div class="step"><span class="num-badge">3</span><div><div class="step-t">構成を直す</div><div class="step-d"><code>最もおすすめの営業管理システムを、最初に結論として提示する構成に修正して</code><br>報告書として使うなら、結論を先頭に。上司が読む順番に合わせる。</div></div></div>
+      </div>
+      <div class="stack-5">
+        <div class="panel">
+          <div class="band">向いている仕事</div>
+          <ul class="ticks tight" style="margin-top:var(--s-3)">
+            <li>ツール比較・ベンダー選定</li>
+            <li>競合調査、業界動向のキャッチアップ</li>
+            <li>制度・規制の横断調査</li>
+          </ul>
+          <p class="muted-note" style="margin-top:var(--s-3)">
+            共通するのは「<strong>やれば分かるが、やる時間がない</strong>」種類の仕事。数十サイトを読ませてから、こちらは判断だけする。
+          </p>
+        </div>
+        <div class="card">
+          <span class="label">Tips</span>
+          <p class="muted-note" style="color:var(--c-body); margin-top:var(--s-2)">
+            P.06 の <strong>#役割 / #文脈 / #制約事項</strong> の型を、そのまま Deep Research にも使えます。「従業員50名規模」の一行があるかないかで、返ってくる製品リストが変わります。
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footline">Part 3 / Deep Research</div><div class="pageno">16 / 20</div>
+</section>
+
+<!-- 17 Canvas / ガイド付き学習 -->
+<section class="slide" data-title="Canvas ／ ガイド付き学習">
+  <div class="s-head">
+    <div class="eyebrow"><span class="chip">Part 3</span><span class="label">Canvas / Guided Learning</span></div>
+    <h1 class="s-title">書き直す道具と、覚える道具</h1>
+  </div>
+  <div class="s-body">
+    <div class="cols-2">
+      <div class="stack-4">
+        <div><span class="band">Canvas ─ 一緒に書き直す</span></div>
+        <p class="muted-note" style="color:var(--c-body)">
+          チャットは会話が下に流れていきますが、Canvas は <strong>ひとつの文書を横に置いて直していく</strong>形式。部分修正を何度も重ねる作業に向きます。
+        </p>
+        <div class="prompt-set">
+          <span class="chip">直しの指示は部分ごとに</span>
+          <div class="prompt">導入文をより充実させて
+
+より詳細で分かりやすい比較表にして</div>
+        </div>
+        <ul class="ticks tight">
+          <li>調査系もそのまま流し込める（<code>直近半年のEC市場におけるトレンドを調査して</code>）</li>
+          <li>一覧化に強い（<code>企業のコンプライアンスとして、特に重要なポイントを一覧化して</code>）</li>
+          <li>白紙から始めたいときは <code>空のCanvasを作って</code></li>
+        </ul>
+      </div>
+      <div class="stack-4">
+        <div><span class="band-ink">ガイド付き学習 ─ 答えを先に言わせない</span></div>
+        <p class="muted-note" style="color:var(--c-body)">
+          通常のチャットは答えをくれます。ガイド付き学習は <strong>問いを返してきます</strong>。理解して自分の言葉で説明できるようになりたいとき用のモード。
+        </p>
+        <div class="prompt-set">
+          <span class="chip">はじめ方</span>
+          <div class="prompt">生成AIの仕組みを学びたい</div>
+          <span class="chip">定着させる</span>
+          <div class="prompt">ここまでの復習として、選択式のクイズを３問出して
+
+ここまでの復習用に、自由記述形式のクイズを１問生成して</div>
+        </div>
+        <div class="card">
+          <p class="muted-note" style="color:var(--c-body)">
+            <strong>社内教育に使えます。</strong><code>添付の自社製品について学びたいです</code> と自社資料を渡せば、その資料に基づいた出題をしてくれます。新人研修の小テストが自動で作れる。
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footline">Part 3 / Canvas &amp; Learning</div><div class="pageno">17 / 20</div>
+</section>
+
+<!-- 18 画像・動画生成 -->
+<section class="slide" data-title="Nano Banana ／ Veo 3.1">
+  <div class="s-head">
+    <div class="eyebrow"><span class="chip">Part 3</span><span class="label">Nano Banana / Veo 3.1</span></div>
+    <h1 class="s-title">画像と動画は、制約事項を書けるかで決まる</h1>
+  </div>
+  <div class="s-body">
+    <div class="cols-2">
+      <div class="stack-4">
+        <div><span class="band">Nano Banana ─ 画像生成</span></div>
+        <div class="prompt-set">
+          <span class="chip">同じ依頼、指定なしと指定ありの差</span>
+          <div class="prompt" style="color:var(--c-mute)">スマホの家計簿アプリの広告用バナー画像を生成して</div>
+          <div class="prompt prompt-lean">スマホの家計簿アプリの広告用バナー画像を生成して
+
+#制約事項
+- サイズは「1200×628」px
+- 「今すぐ登録」のボタン風デザインを配置する
+- 余白を十分に取る
+- 日本語の短いキャッチコピーを配置する
+- 色のコントラストで可読性を担保する</div>
+        </div>
+        <ul class="ticks tight">
+          <li><strong>日本語の文字が入れられる。</strong>インフォグラフィックや漫画も作れます。</li>
+          <li>複数画像を渡して合成できる（背景＋人物＋商品）。差し替えも会話で指示。</li>
+          <li>気に入らなければ <code>別パターンの配色で生成して</code></li>
+        </ul>
+      </div>
+      <div class="stack-4">
+        <div><span class="band-ink">Veo 3.1 ─ 動画生成</span></div>
+        <div class="prompt-set">
+          <span class="chip">日本語でも動くが</span>
+          <div class="prompt prompt-lean">公園で犬と遊ぶ少年。笑顔で走り回る。明るい昼の光。</div>
+          <span class="chip">英語＋撮影用語だと精度が上がる</span>
+          <div class="prompt prompt-lean">Cinematic luxury perfume commercial. A sophisticated businessman in a tailored black suit stands in a modern penthouse at night. Ultra cinematic lighting, dramatic shadows, 4K, shallow depth of field.</div>
+        </div>
+        <div class="card">
+          <p class="muted-note" style="color:var(--c-body)">
+            コツは <strong>「カメラマンへの発注書」を書くつもりで書く</strong>こと。被写体だけでなく、<strong>光・カメラワーク・画質</strong>を指定する。続きの動きも会話で足していけます。
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footline">Part 3 / Generation</div><div class="pageno">18 / 20</div>
+</section>
+
+<!-- 19 Gems -->
+<section class="slide" data-title="Gems ─ 自分専用のGeminiを作る">
+  <div class="s-head">
+    <div class="eyebrow"><span class="chip">Part 3</span><span class="label">Gems</span></div>
+    <h1 class="s-title">毎回同じ指示を書いているなら、それは Gem にできる</h1>
+  </div>
+  <div class="s-body">
+    <div class="split">
+      <div class="stack-4">
+        <p style="margin:0; font-size:var(--t-s-body); line-height:1.85">
+          Gem は <strong>名前・説明・カスタム指示（＋参照ファイル）</strong>を登録した、専用の Gemini です。P.06 の型を一度書いて保存すれば、次からは本文を貼るだけで済みます。
+        </p>
+        <table>
+          <thead><tr><th style="width:180px">Gem</th><th>何を仕込むか</th></tr></thead>
+          <tbody>
+            <tr><td class="table-lead">文章校正AI</td><td>誤字脱字・文法・不自然な表現の修正。<strong>修正理由まで説明させる</strong>のがポイント。</td></tr>
+            <tr><td class="table-lead">爆褒めコーチ</td><td>日報を送ると全力で肯定してくる。未完了タスクも「明日への伸び代」に変換。</td></tr>
+            <tr><td class="table-lead">提案・営業メール作成</td><td>相手企業のHP・ニュース・採用情報を調べさせ、課題仮説 → 訴求ポイント → メール文案まで一気に。</td></tr>
+            <tr><td class="table-lead">社内コンシェルジュ</td><td>FAQ・就業規則・ITガイドラインを<strong>参照ファイルに添付</strong>。「交通費の精算方法は？」に社内ルールで答える。</td></tr>
+            <tr><td class="table-lead">データ分析エキスパート</td><td>集計5観点と Python 実行を固定。売上データを貼って「分析して」だけで動く。</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="stack-4">
+        <div class="panel">
+          <div class="band">効く Gem の共通点</div>
+          <ul class="ticks tight" style="margin-top:var(--s-3)">
+            <li><strong>資料を添付できる。</strong>社内マニュアルを持たせた瞬間、汎用AIが社内ツールに変わります。</li>
+            <li><strong>「資料にない場合」を書いておく。</strong>「推測で答えず、正直に見当たらないと述べる」の一行が作り話を止めます。</li>
+            <li><strong>回答の最後を固定する。</strong>「必ず問い合わせ先を明記」と書いておくと、社内展開できる品質になります。</li>
+          </ul>
+        </div>
+        <div class="bubble">
+          <p class="muted-note" style="color:var(--c-body)">
+            最初の1個は<strong>「自分が今週いちばん多く書いた指示文」</strong>を保存するだけで構いません。凝った Gem より、毎日使う Gem が勝ちます。
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footline">Part 3 / Gems</div><div class="pageno">19 / 20</div>
+</section>
+
+<!-- 20 まとめ -->
+<section class="slide" data-title="まとめ ─ 明日からの3ステップ">
+  <div class="s-head">
+    <div class="eyebrow"><span class="label">Next Actions</span></div>
+    <h1 class="s-title">明日、この順番でやってみてください</h1>
+  </div>
+  <div class="s-body">
+    <div class="cols-3" style="align-items:stretch">
+      <div class="card stack">
+        <span class="stat" style="font-size:var(--t-display)">1<span class="stat-unit">日目</span></span>
+        <h2 style="font-size:var(--t-s-h2); font-weight:900">受信箱でやる</h2>
+        <p class="muted-note" style="color:var(--c-body)">いちばん長いスレッドを1本選んで、6項目の要約テンプレ（P.08）を投げる。新しい画面を開かず、いつもの仕事の中で試す。</p>
+      </div>
+      <div class="card stack">
+        <span class="stat" style="font-size:var(--t-display)">3<span class="stat-unit">日目</span></span>
+        <h2 style="font-size:var(--t-s-h2); font-weight:900">制約事項を足す</h2>
+        <p class="muted-note" style="color:var(--c-body)">結果が微妙だったプロンプトに <strong>#制約事項</strong> を3行足して、もう一度投げる（P.06）。やり直し回数がここでいちばん減ります。</p>
+      </div>
+      <div class="card stack accent-card">
+        <span class="stat" style="font-size:var(--t-display)">1<span class="stat-unit">週間後</span></span>
+        <h2 style="font-size:var(--t-s-h2); font-weight:900">Gem にして固定する</h2>
+        <p class="muted-note" style="color:var(--c-body)">その週いちばん多く書いた指示文を Gem として保存する（P.19）。ここまで来ると、翌週から自動的に時間が浮きます。</p>
+      </div>
+    </div>
+    <div class="panel-ink push">
+      <div class="label" style="color:var(--c-ground-mute)">Remember</div>
+      <p style="margin:var(--s-2) 0 0; font-size:var(--t-s-h2); font-weight:700; line-height:1.7; color:var(--c-ground-ink)">
+        覚えて帰るのは機能名ではなく、<strong>頼み方</strong>。<br>
+        役割・文脈・制約・出力形式。この4つを書けば、道具は勝手に賢くなります。
+      </p>
+    </div>
+  </div>
+  <div class="footline">Thank you</div><div class="pageno">20 / 20</div>
+</section>
+
+</div>
+
+<nav class="bar">
+  <button type="button" id="prev">&larr; 前</button>
+  <button type="button" id="next">次 &rarr;</button>
+  <span class="count"><span id="cur">1</span> / 20</span>
+  <select id="jump" aria-label="スライドを選ぶ"></select>
+  <span class="hint">&larr; &rarr; / Space</span>
+</nav>
+
+<script>
+(function () {
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var stage = document.getElementById('stage');
+  var bar = document.querySelector('.bar');
+  var cur = document.getElementById('cur');
+  var jump = document.getElementById('jump');
+  var i = 0;
+
+  slides.forEach(function (s, n) {
+    var o = document.createElement('option');
+    o.value = String(n);
+    var no = String(n + 1);
+    while (no.length < 2) { no = '0' + no; }
+    o.textContent = no + '  ' + (s.getAttribute('data-title') || '');
+    jump.appendChild(o);
+  });
+
+  function fit() {
+    var barH = bar.offsetHeight;
+    var k = Math.min((window.innerWidth - 32) / 1280, (window.innerHeight - barH - 32) / 720);
+    document.documentElement.style.setProperty('--k', String(Math.max(k, 0.1)));
+    stage.style.bottom = barH + 'px';
+  }
+
+  function show(n) {
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach(function (s, m) { s.hidden = (m !== i); });
+    cur.textContent = String(i + 1);
+    jump.value = String(i);
+  }
+
+  document.getElementById('prev').addEventListener('click', function () { show(i - 1); });
+  document.getElementById('next').addEventListener('click', function () { show(i + 1); });
+  jump.addEventListener('change', function () { show(Number(jump.value)); });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.target && e.target.tagName === 'SELECT') { return; }
+    if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); show(i + 1); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); show(i - 1); }
+    else if (e.key === 'Home') { show(0); }
+    else if (e.key === 'End') { show(slides.length - 1); }
+  });
+
+  window.addEventListener('resize', fit);
+  fit();
+  show(0);
+})();
+</script>
+</body>
+</html>
