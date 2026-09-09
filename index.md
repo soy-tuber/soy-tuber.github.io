@@ -175,6 +175,10 @@ llama.cpp / vLLM / Ollama、Anthropic・Gemini の API、MCP、NVIDIA・AMD、SQ
 | [PatentLLM](https://patentllm.org) | 特許検索 |
 | [HanreiLLM](https://hanrei2.patentllm.org) | 判例検索 |
 | [SubsidyDB](https://subsidy.patentllm.org) | 補助金データベース |
+| [HoureiLLM](https://hourei.patentllm.org) | 法令×判例の横断セマンティック検索。日本・米国（州法/連邦 USC・CFR）・各国（要ログイン） |
+| [PatentLLM AI](https://ai.patentllm.org) | 特許の検索・分析・ランドスケープ（要ログイン） |
+| [HanreiLLM DB](https://dhanrei.patentllm.org) | 判例データベース（Gemini による分析・ファクトチェックつき）（要ログイン） |
+| [Nemotron Apps](https://nemotron.patentllm.org) | ローカル LLM（Nemotron 9B）のチャット・履歴ダッシュボード（要ログイン） |
 
 ---
 
