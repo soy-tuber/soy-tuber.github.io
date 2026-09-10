@@ -4,6 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Gemini 実務活用ハンドブック</title>
+<meta name="description" content="Gmail・カレンダー・スプレッドシート・ドライブなど、毎日使っている Google Workspace の画面で Gemini を活かすための実務ハンドブック。そのままコピーして使えるプロンプト30本以上を、20ページにまとめています。">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="実務ハンドブック">
+<meta property="og:title" content="Gemini 実務活用ハンドブック">
+<meta property="og:description" content="いつもの受信箱・シート・ドライブから始める Gemini の使い方。コピーしてそのまま使えるプロンプト30本以上を収録。">
+<meta property="og:url" content="https://soy-tuber.github.io/gemini-handbook/">
+<meta property="og:locale" content="ja_JP">
+<meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Jost:wght@500;700;800&family=Archivo:wght@500;600;700&display=swap">
 <style>
 /* ============================================================
@@ -322,7 +330,7 @@ td { padding: var(--s-3); border-bottom: var(--rule-dot); color: var(--c-body); 
 <!-- 01 表紙 -->
 <section class="slide" data-title="表紙">
   <div class="s-head" style="gap:var(--s-4)">
-    <span class="label">Seminar / 60 min</span>
+    <span class="label">Practical Handbook</span>
     <div class="display" style="font-size:var(--t-s-title)">Gemini &times; Google Workspace</div>
   </div>
   <div class="s-body" style="justify-content:center; gap:var(--s-6)">
@@ -330,7 +338,10 @@ td { padding: var(--s-3); border-bottom: var(--rule-dot); color: var(--c-body); 
       <span class="mark">明日の業務</span>が変わる、<br>Gemini の使い方
     </h1>
     <p class="s-lead" style="font-size:var(--t-s-h2); color:var(--c-mute); max-width:34em">
-      メール・カレンダー・スプレッドシート・ドライブ。いつも触っている場所から始める、実演20項目。
+      メール・カレンダー・スプレッドシート・ドライブ。いつも触っている場所から始める、実例20項目。
+    </p>
+    <p class="muted-note" style="max-width:36em">
+      対象：Google Workspace を日常業務で使っている方。職種・役職は問いません。予備知識も不要です。
     </p>
   </div>
   <div style="display:flex; gap:var(--s-7); border-top:var(--bd-ink); padding-top:var(--s-4)">
@@ -345,7 +356,7 @@ td { padding: var(--s-3); border-bottom: var(--rule-dot); color: var(--c-body); 
 <section class="slide" data-title="本日のゴール">
   <div class="s-head">
     <div class="eyebrow"><span class="label">Objective</span></div>
-    <h1 class="s-title">この60分で持ち帰っていただくもの</h1>
+    <h1 class="s-title">このハンドブックで持ち帰っていただくもの</h1>
   </div>
   <div class="s-body">
     <div class="cols-3" style="align-items:stretch">
@@ -362,12 +373,12 @@ td { padding: var(--s-3); border-bottom: var(--rule-dot); color: var(--c-body); 
       <div class="card stack accent-card">
         <span class="num-badge">3</span>
         <h2 style="font-size:var(--t-s-h2); font-weight:900">明日そのまま使える文がある</h2>
-        <p class="muted-note" style="color:var(--c-body)">スライドに出るプロンプトは全て実物です。コピーして貼れば、今日の続きから同じ結果が出せます。</p>
+        <p class="muted-note" style="color:var(--c-body)">スライドに出るプロンプトは全て実物です。コピーして貼れば、いま抱えている仕事の続きから同じ結果が出せます。</p>
       </div>
     </div>
     <div class="bubble push">
       <p style="margin:0; font-size:var(--t-s-body)">
-        今日いちばん覚えて帰っていただきたいのは、機能名ではなく <strong>「頼み方」</strong> です。同じ機能でも、頼み方で結果は別物になります。
+        いちばん覚えていただきたいのは、機能名ではなく <strong>「頼み方」</strong> です。同じ機能でも、頼み方で結果は別物になります。
       </p>
     </div>
   </div>
@@ -378,12 +389,12 @@ td { padding: var(--s-3); border-bottom: var(--rule-dot); color: var(--c-body); 
 <section class="slide" data-title="アジェンダ">
   <div class="s-head">
     <div class="eyebrow"><span class="label">Agenda</span></div>
-    <h1 class="s-title">本日の進行</h1>
+    <h1 class="s-title">全体の構成</h1>
   </div>
   <div class="s-body">
     <table>
       <thead>
-        <tr><th style="width:104px">Part</th><th style="width:240px">テーマ</th><th>扱う内容</th><th style="width:80px">時間</th></tr>
+        <tr><th style="width:104px">Part</th><th style="width:240px">テーマ</th><th>扱う内容</th><th style="width:80px">目安</th></tr>
       </thead>
       <tbody>
         <tr>
@@ -407,12 +418,12 @@ td { padding: var(--s-3); border-bottom: var(--rule-dot); color: var(--c-body); 
         <tr>
           <td class="table-lead">CLOSE</td>
           <td><strong>明日からの3ステップ</strong></td>
-          <td>持ち帰って最初にやること／質疑</td>
+          <td>読み終えて最初にやること</td>
           <td class="num">5分</td>
         </tr>
       </tbody>
     </table>
-    <p class="muted-note">※ 画面共有で実演しながら進めます。手元で同じ操作を試していただいて構いません。</p>
+    <p class="muted-note">※ 掲載しているプロンプトは全て実物です。手元で同じ操作を試しながら読み進めてください。時間は通読の目安です。</p>
   </div>
   <div class="footline">Agenda</div><div class="pageno">03 / 20</div>
 </section>
@@ -438,7 +449,7 @@ td { padding: var(--s-3); border-bottom: var(--rule-dot); color: var(--c-body); 
       <div class="cat cat-c">
         <span class="label">Make</span>
         <h3>つくる</h3>
-        <p>文章、返信文、レポート、グラフ。Nano Banana で画像、Veo 3.1 で動画。Canvas で一緒に書き直す。</p>
+        <p>文章、返信文、レポート、グラフ。Nano Banana で画像、Veo で動画。Canvas で一緒に書き直す。</p>
       </div>
       <div class="cat cat-d">
         <span class="label">Connect</span>
@@ -500,7 +511,7 @@ td { padding: var(--s-3); border-bottom: var(--rule-dot); color: var(--c-body); 
         <div class="band-ink">先に知っておくこと</div>
         <ul class="ticks tight" style="margin-top:var(--s-3)">
           <li>参照できるのは <strong>自分がアクセス権を持つ範囲</strong>だけ。権限は変わらない。</li>
-          <li>連携可否は管理者設定に依存。使えない場合は情報システム部門へ。</li>
+          <li>連携可否は管理者設定に依存。組織で使っている場合、使えないときは管理者に確認を。</li>
         </ul>
       </div>
     </div>
@@ -530,7 +541,7 @@ td { padding: var(--s-3); border-bottom: var(--rule-dot); color: var(--c-body); 
 
 #制約事項
 - 日本国内でサポートがある製品
-- 2024年以降の最新情報
+- 直近1年以内の最新情報
 - 費用が不明な場合は空欄にせず「要問い合わせ」と記載
 
 #出力指示
@@ -701,14 +712,14 @@ td { padding: var(--s-3); border-bottom: var(--rule-dot); color: var(--c-body); 
     <div class="split">
       <div class="prompt-set">
         <span class="chip chip-accent">仕上げ ─ 報告の形にする</span>
-        <div class="prompt">以下の項目を含む、「2024年1月 販売実績サマリ」のレポートを出力してください。
+        <div class="prompt">以下の項目を含む、「2026年1月 販売実績サマリ」のレポートを出力してください。
 - 販売データの集計結果（特徴や傾向）
 - 複数観点からの分析に基づくアクション案</div>
       </div>
       <div>
         <div class="band-ink">レポート依頼のコツ</div>
         <ul class="ticks tight" style="margin-top:var(--s-3)">
-          <li><strong>タイトルを先に決めて渡す。</strong>「2024年1月 販売実績サマリ」と名前がつくと、粒度と範囲が自動的に定まります。</li>
+          <li><strong>タイトルを先に決めて渡す。</strong>「2026年1月 販売実績サマリ」と名前がつくと、粒度と範囲が自動的に定まります。</li>
           <li><strong>「集計結果」と「アクション案」を分けて指定する。</strong>片方だけだと、事実の羅列か、根拠のない提案のどちらかに寄ります。</li>
         </ul>
       </div>
@@ -823,9 +834,12 @@ td { padding: var(--s-3); border-bottom: var(--rule-dot); color: var(--c-body); 
       ここからは「使う」から「<span style="color:var(--c-accent)">仕込む</span>」へ。<br>
       一度つくれば、明日以降ずっと効き続けるものを扱います。
     </h2>
+    <p class="muted-note" style="max-width:38em; color:var(--c-ground-mute)">
+      ※ 画像・動画の生成モデルは、名称もバージョンも短い周期で変わります。要点はモデル名ではなく、制約事項の書き方です。
+    </p>
   </div>
   <div style="display:flex; gap:var(--s-3); flex-wrap:wrap">
-    <span class="chip">Deep Research</span><span class="chip">Canvas</span><span class="chip">Guided Learning</span><span class="chip">Nano Banana</span><span class="chip">Veo 3.1</span><span class="chip">Gems</span>
+    <span class="chip">Deep Research</span><span class="chip">Canvas</span><span class="chip">Guided Learning</span><span class="chip">Nano Banana</span><span class="chip">Veo</span><span class="chip">Gems</span>
   </div>
   <div class="footline">Part 3</div><div class="pageno">15 / 20</div>
 </section>
@@ -917,9 +931,9 @@ td { padding: var(--s-3); border-bottom: var(--rule-dot); color: var(--c-body); 
 </section>
 
 <!-- 18 画像・動画生成 -->
-<section class="slide" data-title="Nano Banana ／ Veo 3.1">
+<section class="slide" data-title="Nano Banana ／ Veo">
   <div class="s-head">
-    <div class="eyebrow"><span class="chip">Part 3</span><span class="label">Nano Banana / Veo 3.1</span></div>
+    <div class="eyebrow"><span class="chip">Part 3</span><span class="label">Nano Banana / Veo</span></div>
     <h1 class="s-title">画像と動画は、制約事項を書けるかで決まる</h1>
   </div>
   <div class="s-body">
@@ -945,7 +959,7 @@ td { padding: var(--s-3); border-bottom: var(--rule-dot); color: var(--c-body); 
         </ul>
       </div>
       <div class="stack-4">
-        <div><span class="band-ink">Veo 3.1 ─ 動画生成</span></div>
+        <div><span class="band-ink">Veo ─ 動画生成</span></div>
         <div class="prompt-set">
           <span class="chip">日本語でも動くが</span>
           <div class="prompt prompt-lean">公園で犬と遊ぶ少年。笑顔で走り回る。明るい昼の光。</div>
@@ -1033,7 +1047,7 @@ td { padding: var(--s-3); border-bottom: var(--rule-dot); color: var(--c-body); 
     <div class="panel-ink push">
       <div class="label" style="color:var(--c-ground-mute)">Remember</div>
       <p style="margin:var(--s-2) 0 0; font-size:var(--t-s-h2); font-weight:700; line-height:1.7; color:var(--c-ground-ink)">
-        覚えて帰るのは機能名ではなく、<strong>頼み方</strong>。<br>
+        覚えるのは機能名ではなく、<strong>頼み方</strong>。<br>
         役割・文脈・制約・出力形式。この4つを書けば、道具は勝手に賢くなります。
       </p>
     </div>
