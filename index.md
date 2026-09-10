@@ -114,6 +114,29 @@ AIコーディングの語彙を平易な言葉に翻訳した辞典。
 
 ---
 
+## Handbooks
+
+生成AIの社内研修で使ったハンドブック。掲載しているプロンプトはすべて実物で、コピーしてそのまま使えます。
+機能名ではなく**頼み方**を持ち帰ってもらうことを目的に組んであります。
+
+### [Gemini 実務活用ハンドブック](https://soy-tuber.github.io/gemini-handbook/)
+
+Gmail・カレンダー・スプレッドシート・ドライブ。すでに毎日開いている画面のどこで効くのかを、実演20項目でたどったもの。
+Google Workspace 連携マップから Deep Research・Canvas・Gems まで。
+
+### [Copilot & ChatGPT 実務活用ハンドブック](https://soy-tuber.github.io/copilot-chatgpt-handbook/)
+
+Microsoft 365 Copilot と ChatGPT を、**どちらを開くか**の線引きから整理したもの。
+社内ナレッジ検索・会議・週報・Office 三種は Copilot、出力制御と思考は ChatGPT。
+併用の型（2つをつなぐリレー）と、越えてはいけない線も扱っています。
+
+### [職種別プロンプト集](https://soy-tuber.github.io/prompt-book/)
+
+営業・マーケ・人事・バックオフィスの型を職種別に。道具は問わず、Gemini でも Copilot ＋ ChatGPT でもそのまま動きます。
+「ないものは書かない」を制約に入れる、評価と修正を1ターンにしない、といった**外すと壊れる作法**を先に置いてあります。
+
+---
+
 ## Case Law
 
 判例・裁判例を分野や利用場面から引くためのページと、個別論点の検証メモ。
