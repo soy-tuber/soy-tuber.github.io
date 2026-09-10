@@ -363,7 +363,7 @@ td { padding: var(--s-3); border-bottom: var(--rule-dot); color: var(--c-body); 
   </div>
   <div style="display:flex; gap:var(--s-7); border-top:var(--bd-ink); padding-top:var(--s-4)">
     <div><div class="label">Slides</div><div class="stat" style="font-size:var(--t-display)">29</div></div>
-    <div><div class="label">Prompts</div><div class="stat" style="font-size:var(--t-display)">44</div></div>
+    <div><div class="label">Prompts</div><div class="stat" style="font-size:var(--t-display)">50<span class="stat-unit">+</span></div></div>
     <div><div class="label">Tools</div><div class="stat" style="font-size:var(--t-display)">2</div></div>
     <div><div class="label">Date</div><div class="stat" style="font-size:var(--t-display)">2026.09</div></div>
   </div>
@@ -520,7 +520,7 @@ td { padding: var(--s-3); border-bottom: var(--rule-dot); color: var(--c-body); 
       <div class="cat cat-b">
         <span class="label">Find</span>
         <h3>探す</h3>
-        <p><strong>Copilot 一択。</strong>社外AIに社内の探し物は頼めません。</p>
+        <p><strong>Copilot 一択。</strong>ChatGPT は社内を見に行けません。</p>
         <div class="prompt-mini">新プランの価格改定を議論した
 資料を、内容から探して</div>
       </div>
@@ -550,7 +550,7 @@ td { padding: var(--s-3); border-bottom: var(--rule-dot); color: var(--c-body); 
       <div class="card card-tight">
         <span class="label">Caution</span>
         <p class="body-note" style="margin-top:var(--s-2)">
-          いちばん間違えやすいのが「探す」です。<strong>ここを取り違えると情報漏えいになります</strong>（P.12）。
+          いちばん間違えやすいのが「探す」です。ChatGPT に頼むと資料を自分で貼ることになり、<strong>権限の壁を人が越えてしまいます</strong>（P.12）。
         </p>
       </div>
     </div>
@@ -812,9 +812,9 @@ SharePoint上の資料から探して、
         <p class="body-note">見えてはいけない資料が出てきたら、それは AI の問題ではなく<strong>元の権限設定の問題</strong>。すぐ管理者へ。</p>
       </div>
       <div class="card card-tight stack">
-        <span class="chip">Confidential</span>
-        <h2 style="font-size:var(--t-s-h2); font-weight:900">社外AIに入れない</h2>
-        <p class="body-note">社外秘・個人情報・未公開の数値を、<strong>社外の汎用AIに貼らない</strong>。社内データの仕事は Copilot 側で完結させる。</p>
+        <span class="chip">Boundary</span>
+        <h2 style="font-size:var(--t-s-h2); font-weight:900">権限の壁を人が越えない</h2>
+        <p class="body-note">Copilot は自分の権限内しか見ません。一方、<strong>貼る側の道具には何でも持ち込めます</strong>。契約が守るのは保存と通信で、持ち込みの判断は人に残ります。</p>
       </div>
       <div class="card card-tight stack accent-card">
         <span class="chip">IP</span>
@@ -1132,7 +1132,7 @@ SharePoint上の資料から探して、
     </div>
     <div class="bubble bubble-tight push">
       <p class="body-note">
-        共通するのは <strong>「事実は Copilot、判断材料は ChatGPT」</strong>という分業。受け渡しで社外秘を落とす一手間だけ、必ず人が行ってください。
+        共通するのは <strong>「事実は Copilot、判断材料は ChatGPT」</strong>という分業。受け渡しのとき、<strong>自分に閲覧権限のある情報だけを持ち込む</strong>。ここだけは人の判断です。
       </p>
     </div>
   </div>
@@ -1379,7 +1379,7 @@ AIがその部分を創作します。
   <div class="s-body">
     <div class="split">
       <div class="prompt-set">
-        <span class="chip">1. 匿名化前処理 ─ 選考評価にかける前に</span>
+        <span class="chip">1. 属性の除去 ─ 漏えい対策ではなく、公正な選考のため</span>
         <div class="prompt prompt-lean prompt-dense">#命令
 以下のテキストから、選考評価・分析に不要な個人識別情報を除去し、匿名化版を出力してください。
 
@@ -1572,30 +1572,30 @@ AIがその部分を創作します。
 </section>
 
 <!-- A-08 越えてはいけない線 -->
-<section class="slide" data-title="A-08 越えてはいけない線">
+<section class="slide" data-title="A-08 契約で消えるリスクと、消えないリスク">
   <div class="s-head">
-    <div class="eyebrow"><span class="chip">Appendix</span><span class="label">A-08 / Cautions</span></div>
-    <h1 class="s-title">越えてはいけない線</h1>
+    <div class="eyebrow"><span class="chip">Appendix</span><span class="label">A-08 / What remains</span></div>
+    <h1 class="s-title">契約で消えるリスクと、消えないリスク</h1>
   </div>
   <div class="s-body">
     <table class="t-compact">
-      <thead><tr><th style="width:180px">場面</th><th style="width:34%">やってはいけないこと</th><th>代わりにこうする</th></tr></thead>
+      <thead><tr><th style="width:165px">場面</th><th style="width:27%">法人契約で下がるリスク</th><th>それでも人がやること</th></tr></thead>
       <tbody>
-        <tr><td class="table-lead">履歴書・職務経歴書</td><td>原本をそのまま外部AIに貼る</td><td>A-04 の匿名化を、社内承認済み環境で先に通す。AIには「漏れの検出」だけを担わせる</td></tr>
-        <tr><td class="table-lead">書類選考・面接評価</td><td>AIの判定をそのまま合否に使う</td><td>判断は人が行う。四半期に一度 A-04 のバイアス監査をかける</td></tr>
-        <tr><td class="table-lead">1on1・面談</td><td>生の会話記録を本人同意なく入力する</td><td>本人が書いた振り返りシートのみを対象にする。健康・家庭事情の記述は入力から除外</td></tr>
-        <tr><td class="table-lead">サーベイ自由記述</td><td>ハラスメント示唆を集計に混ぜる</td><td>集計から外し、内容は記載せず規定の窓口へ即エスカレーション</td></tr>
-        <tr><td class="table-lead">調査・市場データ</td><td>出てきた統計名や数値を資料に載せる</td><td>A-03 のファクトチェックを<strong>別チャットで</strong>かけ、一次情報に当たる</td></tr>
-        <tr><td class="table-lead">社外秘・未公開情報</td><td>顧客名・未公開の数値を外部AIに貼る</td><td>社内データを扱う仕事は Copilot 側で完結させる（本編 P.12）</td></tr>
+        <tr><td class="table-lead">履歴書・職務経歴書</td><td>学習利用と外部流出は契約で対処済み</td><td>評価に不要な属性は除去する。理由は漏えいではなく<strong>公正な選考</strong>。本籍・家族・傷病等は、人が読む場合も把握してはならない事項（A-04）</td></tr>
+        <tr><td class="table-lead">書類選考・面接評価</td><td>契約とは無関係</td><td>判定をそのまま合否に使わない。氏名だけ変えた同一経歴で出力が変わらないかを定期確認する（A-04）</td></tr>
+        <tr><td class="table-lead">1on1・面談</td><td>保存先は契約テナント内</td><td>生の会話記録は本人の同意を取る。健康・家庭事情は入力しない。漏えいではなく<strong>目的外利用</strong>の問題（A-05）</td></tr>
+        <tr><td class="table-lead">サーベイ自由記述</td><td>契約とは無関係</td><td>ハラスメント・違法行為・自傷の示唆は集計に混ぜず、規定の窓口へ即エスカレーション（A-05）</td></tr>
+        <tr><td class="table-lead">参照する情報の範囲</td><td>Copilot は権限内しか見ない</td><td><strong>貼る側の道具には何でも持ち込めます。</strong>閲覧権限のない資料を、自分で持ち込まない（本編 P.12）</td></tr>
+        <tr><td class="table-lead">調査・市場データ</td><td>契約とは無関係</td><td>統計名や数値の捏造は契約では防げない。別セッションでファクトチェックし、一次情報に当たる（A-03）</td></tr>
       </tbody>
     </table>
     <div class="bubble bubble-tight push">
       <p class="body-note">
-        この6行は、社内スキル集の各プロンプトに付いている<strong>「注意」の欄</strong>を集めたものです。プロンプト本体より、こちらのほうが事故を防ぎます。
+        法人契約で消えるのは<strong>漏えい</strong>のリスクだけです。<strong>誤った判断</strong>と<strong>目的外利用</strong>は消えません。会話ログは管理者が閲覧・エクスポートできるため、人事・法務の機微情報は閲覧範囲を確認してから入れてください。
       </p>
     </div>
   </div>
-  <div class="footline">Appendix / Cautions</div><div class="pageno">A-08</div>
+  <div class="footline">Appendix / What remains</div><div class="pageno">A-08</div>
 </section>
 
 </div>
