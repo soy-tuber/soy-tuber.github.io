@@ -1,0 +1,768 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>職種別プロンプト集</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Jost:wght@500;700;800&family=Archivo:wght@500;600;700&display=swap">
+<style>
+/* ============================================================
+   tokens.css 準拠
+   原典トークンは一切変更していない。
+   投影用に --t-s-* の6つだけを「追加」している。
+   この資料はモノクロ運用：黄（--c-accent）とカテゴリ色は使わない。
+   ============================================================ */
+:root {
+  --c-ink:     #000000;
+  --c-body:    #1F1F1F;
+  --c-mute:    #6E7478;
+  --c-line:    #CBD0D3;
+  --c-surface: #E5EBEE;
+  --c-paper:   #FFFFFF;
+
+  --c-ground:      #000000;
+  --c-ground-ink:  #FFFFFF;
+  --c-ground-mute: #9BA1A5;
+  --c-ground-line: #4A4A4A;
+
+  --f-sans: "Noto Sans JP", -apple-system, "Hiragino Kaku Gothic ProN", "Yu Gothic", Meiryo, sans-serif;
+  --f-disp: "Jost", "Noto Sans JP", sans-serif;
+  --f-num:  "Archivo", "Noto Sans JP", Arial, sans-serif;
+  --f-mono: "SFMono-Regular", Menlo, Consolas, "Liberation Mono", "Noto Sans Mono", monospace;
+
+  --t-display: 2.000rem;
+  --t-body:    0.9375rem;
+  --t-small:   0.8125rem;
+  --t-label:   0.6875rem;
+
+  /* ---- 追加：投影用の段（screen tier）------------------- */
+  --t-s-hero:  4.500rem;
+  --t-s-title: 2.250rem;
+  --t-s-h2:    1.500rem;
+  --t-s-body:  1.0625rem;
+  --t-s-small: 0.875rem;
+  --t-s-label: 0.750rem;
+
+  --lh-body:  1.85;
+  --lh-head:  1.40;
+  --lh-tight: 1.05;
+  --ls-head:  0.02em;
+  --ls-label: 0.18em;
+  --ls-disp:  0.06em;
+
+  --s-1: 4px;  --s-2: 8px;  --s-3: 12px; --s-4: 16px;
+  --s-5: 24px; --s-6: 32px; --s-7: 48px; --s-8: 64px;
+
+  --r-1: 3px;
+  --r-3: 14px;
+  --r-pill: 999px;
+
+  --bd:       1px solid var(--c-line);
+  --bd-ink:   1px solid var(--c-ink);
+  --rule-dot: 1px dotted var(--c-ink);
+}
+
+html { font-size: 16px; }
+body {
+  margin: 0;
+  background: var(--c-surface);
+  color: var(--c-body);
+  font-family: var(--f-sans);
+  font-size: var(--t-body);
+  line-height: var(--lh-body);
+  font-feature-settings: "palt" 1;
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3 { color: var(--c-ink); line-height: var(--lh-head); letter-spacing: var(--ls-head); margin: 0; }
+code { font-family: var(--f-mono); }
+
+.label {
+  font-family: var(--f-disp);
+  font-size: var(--t-s-label); font-weight: 700;
+  letter-spacing: var(--ls-label); text-transform: uppercase;
+  color: var(--c-mute);
+}
+.display {
+  font-family: var(--f-disp); font-weight: 800;
+  letter-spacing: var(--ls-disp); text-transform: uppercase;
+  color: var(--c-ink); line-height: var(--lh-tight);
+}
+.band-ink {
+  display: inline-block;
+  background: var(--c-ink); color: var(--c-ground-ink);
+  font-weight: 700; font-size: var(--t-s-body); line-height: 1.5;
+  padding: var(--s-1) var(--s-3); border-radius: var(--r-1);
+}
+.chip {
+  display: inline-block;
+  background: var(--c-ink); color: var(--c-ground-ink);
+  font-family: var(--f-disp);
+  font-size: var(--t-s-label); font-weight: 700; letter-spacing: 0.08em;
+  padding: 3px var(--s-2); border-radius: var(--r-1);
+  white-space: nowrap;
+}
+.num-badge {
+  display: inline-flex; align-items: center; justify-content: center;
+  flex: none; width: 28px; height: 28px; border-radius: var(--r-pill);
+  background: var(--c-ink); color: var(--c-ground-ink);
+  font-family: var(--f-num); font-size: var(--t-s-small); font-weight: 700;
+}
+.bubble {
+  position: relative; background: var(--c-paper);
+  border: var(--bd-ink); border-radius: var(--r-3);
+  padding: var(--s-4) var(--s-5);
+}
+.bubble-tight { padding: var(--s-3) var(--s-5); }
+.bubble::after {
+  content: ""; position: absolute; left: var(--s-6); bottom: -9px;
+  width: 16px; height: 9px; background: inherit;
+  border-right: var(--bd-ink); border-bottom: var(--bd-ink);
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+}
+.panel { background: var(--c-surface); padding: var(--s-5); border-radius: var(--r-3); }
+.card  { background: var(--c-paper); border: var(--bd); border-radius: var(--r-3); padding: var(--s-5); }
+.card-tight { padding: var(--s-4); }
+.num { font-family: var(--f-num); font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
+
+table { border-collapse: collapse; width: 100%; font-size: var(--t-s-small); }
+th {
+  text-align: left; color: var(--c-mute); font-weight: 700;
+  font-family: var(--f-disp);
+  font-size: var(--t-s-label); letter-spacing: 0.08em; text-transform: uppercase;
+  padding: var(--s-2) var(--s-3); border-bottom: var(--bd-ink);
+}
+td { padding: var(--s-3); border-bottom: var(--rule-dot); color: var(--c-body); vertical-align: top; line-height: 1.7; }
+.table-lead {
+  background: var(--c-ink); color: var(--c-ground-ink);
+  font-weight: 700; font-size: var(--t-s-small);
+  border-bottom: 1px solid var(--c-paper); white-space: nowrap;
+}
+.t-compact td, .t-compact th { padding: var(--s-2) var(--s-3); }
+.t-compact td { line-height: 1.6; }
+
+/* ============================================================
+   1280x720 固定キャンバス
+   ============================================================ */
+.stage {
+  position: fixed; left: 0; right: 0; top: 0; bottom: 0;
+  display: grid; place-items: center;
+  overflow: hidden; background: var(--c-surface);
+}
+.slide {
+  width: 1280px; height: 720px; flex: none;
+  box-sizing: border-box; padding: 52px 72px 52px;
+  background: var(--c-paper); color: var(--c-body);
+  display: flex; flex-direction: column; gap: var(--s-4);
+  transform: scale(var(--k, 1)); transform-origin: center center;
+  position: relative; overflow: hidden;
+}
+.slide[hidden] { display: none; }
+.slide.ink { background: var(--c-ground); color: var(--c-ground-mute); }
+.slide.ink h1, .slide.ink h2, .slide.ink h3, .slide.ink .display { color: var(--c-ground-ink); }
+.slide.ink .label { color: var(--c-ground-mute); }
+.slide.ink .chip { background: var(--c-paper); color: var(--c-ink); }
+.slide.ink .prompt { background: transparent; border: 1px solid var(--c-ground-line); color: var(--c-ground-ink); }
+
+.s-head { display: flex; flex-direction: column; gap: var(--s-3); }
+.eyebrow { display: flex; align-items: center; gap: var(--s-3); }
+.s-title { font-size: var(--t-s-title); font-weight: 900; color: var(--c-ink); text-wrap: balance; line-height: 1.3; }
+.s-body { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: var(--s-4); font-size: var(--t-s-body); }
+.pageno {
+  position: absolute; right: 72px; bottom: 26px;
+  font-family: var(--f-num); font-variant-numeric: tabular-nums;
+  font-size: var(--t-s-label); font-weight: 600; color: var(--c-mute);
+}
+.slide.ink .pageno { color: var(--c-ground-mute); }
+.footline {
+  position: absolute; left: 72px; bottom: 26px;
+  font-family: var(--f-disp); font-size: var(--t-s-label); font-weight: 700;
+  letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--c-line);
+}
+.slide.ink .footline { color: var(--c-ground-line); }
+
+.prompt {
+  background: var(--c-surface); border-radius: var(--r-3);
+  padding: var(--s-4) var(--s-5);
+  font-family: var(--f-mono); font-size: var(--t-s-small);
+  line-height: 1.75; color: var(--c-body);
+  white-space: pre-wrap; overflow-wrap: anywhere;
+}
+.prompt-lean  { padding-top: var(--s-3); padding-bottom: var(--s-3); }
+/* 長いプロンプト全文を1枚に収めるとき。原文は改変せず行送りだけ詰める */
+.prompt-dense { line-height: 1.6; }
+.prompt-set { display: flex; flex-direction: column; gap: var(--s-3); }
+.prompt-set > .chip { align-self: flex-start; }
+
+.cols-2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-6); align-items: start; }
+.split  { display: grid; grid-template-columns: 1.15fr 1fr; gap: var(--s-7); align-items: start; }
+
+.steps { display: flex; flex-direction: column; gap: 0; }
+.step { display: flex; gap: var(--s-4); padding: var(--s-4) 0; border-bottom: var(--rule-dot); }
+.step:last-child { border-bottom: 0; }
+.steps-tight .step { padding: var(--s-3) 0; }
+.step-t { font-weight: 700; color: var(--c-ink); font-size: var(--t-s-body); }
+.step-d { font-size: var(--t-s-small); color: var(--c-body); line-height: 1.8; }
+
+.ticks { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--s-3); }
+.ticks li { display: flex; gap: var(--s-3); font-size: var(--t-s-body); line-height: 1.75; }
+.ticks li::before { content: "\2014"; color: var(--c-mute); flex: none; }
+.tight { gap: var(--s-2); }
+.tight li { font-size: var(--t-s-small); }
+
+.stack-4 { display: flex; flex-direction: column; gap: var(--s-4); }
+.stack-5 { display: flex; flex-direction: column; gap: var(--s-5); }
+.push { margin-top: auto; margin-bottom: var(--s-3); }
+.muted-note { margin: 0; font-size: var(--t-s-small); color: var(--c-mute); line-height: 1.8; }
+.body-note  { margin: 0; font-size: var(--t-s-small); color: var(--c-body); line-height: 1.85; }
+
+.bar {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 10;
+  display: flex; align-items: center; gap: var(--s-3);
+  padding: var(--s-2) var(--s-4);
+  background: var(--c-paper); border-top: var(--bd);
+}
+.bar button, .bar select {
+  font-family: var(--f-sans); font-size: var(--t-small); font-weight: 700;
+  padding: var(--s-1) var(--s-4); border: var(--bd-ink); border-radius: var(--r-1);
+  background: var(--c-paper); color: var(--c-ink); cursor: pointer; line-height: 1.6;
+}
+.bar select { flex: 1; min-width: 0; font-weight: 400; }
+.bar button:focus-visible, .bar select:focus-visible { outline: 2px solid var(--c-ink); outline-offset: 2px; }
+.bar .count {
+  font-family: var(--f-num); font-variant-numeric: tabular-nums;
+  font-size: var(--t-small); font-weight: 700; color: var(--c-ink);
+}
+.bar .hint {
+  font-size: var(--t-label); color: var(--c-mute); letter-spacing: var(--ls-label);
+  text-transform: uppercase; font-family: var(--f-disp); font-weight: 700;
+}
+
+@media print {
+  @page { size: 1280px 720px; margin: 0; }
+  body { background: var(--c-paper); }
+  .bar { display: none; }
+  .stage { position: static; display: block; overflow: visible; }
+  .slide { display: flex !important; transform: none !important; break-after: page; page-break-after: always; }
+  .slide:last-child { break-after: auto; page-break-after: auto; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+</head>
+<body>
+
+<div class="stage" id="stage">
+
+<!-- 01 表紙 -->
+<section class="slide ink" data-title="表紙">
+  <div class="s-head">
+    <div class="eyebrow"><span class="chip">Prompt Book</span><span class="label">By Job Function</span></div>
+  </div>
+  <div class="s-body" style="justify-content:center; gap:var(--s-5)">
+    <div class="split" style="align-items:center; gap:var(--s-8)">
+      <div class="stack-5">
+        <div class="display" style="font-size:var(--t-s-hero)">職種別<br>プロンプト集</div>
+        <h2 style="font-size:var(--t-s-h2); font-weight:700; line-height:1.8">
+          営業・マーケ・人事・バックオフィス。<br>
+          <strong>道具は問いません。</strong>Gemini でも、Copilot ＋ ChatGPT でも、
+          そのまま貼って動きます。
+        </h2>
+      </div>
+      <div class="prompt-set">
+        <span class="chip">最初に一度だけ読む</span>
+        <div class="prompt prompt-lean">{{ }} を全部埋めてから投げる。
+
+埋め残しの {{ }} を含んだまま投げると、
+AIがその部分を創作します。
+これが最も多い失敗です。</div>
+      </div>
+    </div>
+  </div>
+  <div style="display:flex; gap:var(--s-3); flex-wrap:wrap">
+    <span class="chip">営業</span><span class="chip">マーケティング・企画</span><span class="chip">人事・採用</span><span class="chip">人事・組織／管理職</span><span class="chip">バックオフィス</span><span class="chip">全職種共通</span>
+  </div>
+  <div class="footline">Prompt Book</div>
+</section>
+
+<!-- 02 頼み方の型 -->
+<section class="slide" data-title="02 頼み方の型">
+  <div class="s-head">
+    <div class="eyebrow"><span class="chip">Core</span><span class="label">The Format</span></div>
+    <h1 class="s-title">すべての型の土台 ─ 5つの見出しで区切るだけ</h1>
+  </div>
+  <div class="s-body">
+    <div class="split">
+      <div class="prompt-set">
+        <span class="chip">骨格テンプレート</span>
+        <div class="prompt prompt-lean prompt-dense">#役割
+あなたは経験豊富なIT導入コンサルタントです。
+
+#命令
+勤怠管理システムの入れ替え候補を比較してください。
+
+#文脈
+当社は従業員50名の日本企業。現在はExcel台帳で管理して
+おり、集計ミスと締め作業の残業が課題です。
+
+#制約事項
+- 日本国内でサポートがある製品
+- 2024年以降の最新情報
+- 費用が不明な場合は空欄にせず「要問い合わせ」と記載
+
+#出力指示
+製品名 / 初期費用 / 月額 / 特徴 / 導入事例 の表で、3製品</div>
+      </div>
+      <div class="stack-4">
+        <div class="steps steps-tight">
+          <div class="step"><span class="num-badge">1</span><div><div class="step-t">#役割</div><div class="step-d">誰として答えるか。専門家を指定すると語彙と観点が変わる。</div></div></div>
+          <div class="step"><span class="num-badge">2</span><div><div class="step-t">#命令</div><div class="step-d">やってほしいことを一文で。ここだけ書くのが「ふつうの使い方」。</div></div></div>
+          <div class="step"><span class="num-badge">3</span><div><div class="step-t">#文脈</div><div class="step-d">自社の状況。ここを書くと一般論が自分ごとの答えになる。</div></div></div>
+          <div class="step"><span class="num-badge">4</span><div><div class="step-t">#制約事項</div><div class="step-d">やってほしくないことを先に潰す。<strong>やり直しがいちばん減るのはここ</strong>。</div></div></div>
+          <div class="step"><span class="num-badge">5</span><div><div class="step-t">#出力指示</div><div class="step-d">形式と数。「3製品」と書かないと数が揃いません。</div></div></div>
+        </div>
+        <p class="muted-note">全部書く必要はありません。<strong>うまくいかないときに、足りない見出しを1つ足す。</strong>それだけで直ります。</p>
+      </div>
+    </div>
+  </div>
+  <div class="footline">The Format</div><div class="pageno">02 / 10</div>
+</section>
+
+<!-- 03 使い方と職種マップ -->
+<section class="slide" data-title="03 使い方と職種マップ">
+  <div class="s-head">
+    <div class="eyebrow"><span class="chip">Index</span><span class="label">How to use</span></div>
+    <h1 class="s-title">3つのルールと、どこを開くか</h1>
+  </div>
+  <div class="s-body">
+    <div class="split">
+      <table class="t-compact">
+        <thead><tr><th style="width:190px">職種</th><th>収録している型</th></tr></thead>
+        <tbody>
+          <tr><td class="table-lead">営業</td><td>商談前ブリーフ／文面の自己改良ループ &nbsp;<strong>04</strong></td></tr>
+          <tr><td class="table-lead">マーケ・企画</td><td>ファクトチェック／競合比較と空白地帯 &nbsp;<strong>05</strong></td></tr>
+          <tr><td class="table-lead">人事・採用</td><td>属性の除去／バイアス自己監査 &nbsp;<strong>06</strong></td></tr>
+          <tr><td class="table-lead">人事・組織／管理職</td><td>サーベイ自由記述の分析／1on1の論点整理 &nbsp;<strong>07</strong></td></tr>
+          <tr><td class="table-lead">バックオフィス</td><td>参照資料限定Q&amp;A／リライト・添削の2段 &nbsp;<strong>08</strong></td></tr>
+          <tr><td class="table-lead">全職種共通</td><td>やりたいこと別テンプレート早見表 &nbsp;<strong>09</strong></td></tr>
+        </tbody>
+      </table>
+      <div class="stack-4">
+        <div class="steps steps-tight">
+          <div class="step"><span class="num-badge">1</span><div><div class="step-t">{{ }} を全部埋める</div><div class="step-d">埋め残すと、AIがその部分を創作します。使わない項目は行ごと消す。</div></div></div>
+          <div class="step"><span class="num-badge">2</span><div><div class="step-t">「ないものは書かない」を必ず入れる</div><div class="step-d">「資料に記載がない場合は『記載なし』とだけ答える」。この一行の有無で、返ってくるものの信頼度が変わります。</div></div></div>
+          <div class="step"><span class="num-badge">3</span><div><div class="step-t">評価と修正を1ターンにしない</div><div class="step-d">まず指摘だけ出させ、採用する指摘を選んでから直させる。同時にやると、主張ごと書き換えられます。</div></div></div>
+        </div>
+        <p class="muted-note">
+          社内データを参照する型は、使う道具が社内に接続されている場合にのみ動きます。接続がない道具では、資料を自分で貼って使ってください（10 を参照）。
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="footline">Index</div><div class="pageno">03 / 10</div>
+</section>
+
+<!-- 04 営業 -->
+<section class="slide" data-title="04 営業">
+  <div class="s-head">
+    <div class="eyebrow"><span class="chip">04</span><span class="label">Sales</span></div>
+    <h1 class="s-title">営業</h1>
+  </div>
+  <div class="s-body">
+    <div class="split">
+      <div class="prompt-set">
+        <span class="chip">1. 商談前ブリーフ ─ 事実を調べさせず、調べる項目を作らせる</span>
+        <div class="prompt prompt-lean prompt-dense">明日の商談に向けたブリーフを作成してください。
+
+#相手企業（私が確認済みの情報のみ）
+- 業種 / 規模 / 地域：{{ }}
+- 面談相手の部署・役職：{{ }}
+- 公開情報から分かっていること：{{無ければ「未確認」}}
+- これまでの接触：{{資料DL、過去商談の要点}}
+
+#出力
+1. 確認済み事実の整理（ここに新しい事実を足さない）
+2. 業界一般の仮説5つ。各々に「商談で確かめる質問」を1つ
+3. 要確認リスト（調べ方とセットで最大5つ）
+4. 地雷（言うと印象を損ねる可能性のある発言3つ）
+
+#制約
+- 「確認済み事実」に無い企業固有の事実（数値・取り組み名・
+  人名）を一切生成しない。仮説は断定形を使わない</div>
+      </div>
+      <div class="stack-4">
+        <div class="prompt-set">
+          <span class="chip">2. 文面の自己改良ループ</span>
+          <div class="prompt prompt-lean prompt-dense">以下の営業メールを自己評価し、改訂版を出してください。
+
+#手順（この順で必ず出力）
+1. 5観点×20点で採点（件名／冒頭2行／提供価値／
+   証拠／CTA）と減点理由
+2. 減点の大きい3点を、直し方とセットで
+3. 改訂版。文字数は元の文面以下に収めること
+4. 再採点。95点以上を付けるなら、それでも残る
+   減点候補を必ず1つ挙げる
+
+#制約
+- 敬語を増やして丁寧にするだけの修正は改善とみなさない
+- 元の文面にない実績・数値・顧客名を追加しない</div>
+        </div>
+        <div class="card card-tight">
+          <span class="label">Note ─ 提案書骨子</span>
+          <p class="body-note" style="margin-top:var(--s-2)">
+            7章立て＋自己採点100点ループ。第1章「現状認識」を<strong>ヒアリング発言の引用だけ</strong>で書けないなら、
+            作り直すのは提案書ではなく商談です。
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footline">Sales</div><div class="pageno">04 / 10</div>
+</section>
+
+<!-- 05 マーケティング・企画 -->
+<section class="slide" data-title="05 マーケティング・企画">
+  <div class="s-head">
+    <div class="eyebrow"><span class="chip">05</span><span class="label">Marketing</span></div>
+    <h1 class="s-title">マーケティング・企画</h1>
+  </div>
+  <div class="s-body">
+    <div class="split">
+      <div class="prompt-set">
+        <span class="chip">1. ファクトチェック ─ 必ず別チャットで実行する</span>
+        <div class="prompt prompt-lean prompt-dense">あなたはファクトチェッカーです。以下を検証対象として扱い、
+内容を擁護せず批判的に点検してください。
+
+#依頼
+1. 「事実主張」だけを抽出し番号付きリストに。事実主張とは
+   数値・固有名詞・年次・順位・因果関係を含む検証可能な文。
+   意見・推奨・一般論は除外
+2. 各主張を表に。列は 主張 / 検証に必要な一次情報 /
+   確認先 / 判定（検証可能・出典不明・検証不能）/
+   誤っていた場合の事業判断への影響（大中小）
+3. 「出典不明 かつ 影響大」を優先度順に並べ、検証するまで
+   意思決定に使ってはいけない旨を明記
+4. 調査会社レポート名・統計名は実在の自信度を添え、
+   中以下は捏造の可能性が高いと警告
+
+#制約
+- 「概ね正しいと思われます」のような曖昧な判定は禁止
+- 検証していないものを「正しい」と判定しない</div>
+      </div>
+      <div class="stack-4">
+        <div class="prompt-set">
+          <span class="chip">2. 競合比較表と空白地帯の特定</span>
+          <div class="prompt prompt-lean prompt-dense">この市場の競合を「直接競合3社」「間接競合2社」
+「代替手段2つ」に分けて挙げ、表にして。
+列は 区分 / 名称 / 提供価値 / 主なターゲット /
+価格帯 / 強み / 弱み・未対応領域 / 数値情報の確度
+
+#制約
+- 「弱み」は【構造的な制約】か【単なる未着手】かを
+  区別して書く。狙うべきは前者
+- 売上・シェア等の数値は出典を併記。特定できない
+  場合は「非公開」と書く。推測値を書かない
+- 「代替手段：何もしない」を必ず含める</div>
+        </div>
+        <div class="card card-tight">
+          <span class="label">Caution</span>
+          <p class="body-note" style="margin-top:var(--s-2)">
+            競合の<strong>売上・シェア・ユーザー数は捏造率が高い</strong>。企業名と提供内容までは使えますが、数値はIR資料等で必ず確認してください。
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footline">Marketing</div><div class="pageno">05 / 10</div>
+</section>
+
+<!-- 06 人事・採用 -->
+<section class="slide" data-title="06 人事・採用">
+  <div class="s-head">
+    <div class="eyebrow"><span class="chip">06</span><span class="label">Recruiting</span></div>
+    <h1 class="s-title">人事・採用</h1>
+  </div>
+  <div class="s-body">
+    <div class="split">
+      <div class="prompt-set">
+        <span class="chip">1. 属性の除去 ─ 漏えい対策ではなく、公正な選考のため</span>
+        <div class="prompt prompt-lean prompt-dense">#命令
+以下のテキストから、選考評価・分析に不要な個人識別情報を除去し、匿名化版を出力してください。
+
+#除去・置換ルール
+- 氏名 → 「{{候補者ID}}」に置換（読み仮名・ローマ字も）
+- 生年月日・年齢／性別を示す記述／住所 → 削除
+- 連絡先・SNS・個人URL／顔写真への言及 → 削除
+- 国籍・本籍・出身地・出身校名 → 削除（学部・専攻は残す）
+- 家族構成・扶養／傷病・障害・妊娠出産・育児介護 → 削除
+- 在籍企業名 → 「A社（業界／従業員規模）」に一般化
+- 業務内容・実績数値・使用ツール・保有資格 → そのまま残す
+
+#出力指示
+1. 匿名化済みテキスト
+2. 除去した項目の一覧（項目名のみ。値そのものは出力しない）
+3. 判断に迷い、要確認の箇所</div>
+      </div>
+      <div class="stack-4">
+        <div class="prompt-set">
+          <span class="chip">2. バイアス自己監査 ─ 四半期に一度</span>
+          <div class="prompt prompt-lean prompt-dense">以下の「評価出力」を検査し、JDに記載のない評価軸や、
+属性に基づく推測が混入していないか指摘して。
+
+#検査観点
+1. JDの必須・歓迎要件にない評価軸が使われていないか
+2. 性別・年齢・国籍・出身校・家族構成・傷病等への言及や推測
+3. 就業の空白期間そのものを不利に扱っていないか
+4. 経歴の「書き方の巧拙」を能力と混同していないか
+5. 「記載なし」と「経験なし」を混同していないか
+
+#出力指示
+該当箇所（原文引用）/ 観点番号 / なぜ問題か / 修正案
+の表。問題が無ければ「指摘なし」と明記</div>
+        </div>
+        <div class="card card-tight">
+          <span class="label">Check</span>
+          <p class="body-note" style="margin-top:var(--s-2)">
+            <strong>氏名だけを変えた同一経歴</strong>を2〜3パターン流し、出力が変わらないことも確認する。
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footline">Recruiting</div><div class="pageno">06 / 10</div>
+</section>
+
+<!-- 07 人事・組織／管理職 -->
+<section class="slide" data-title="07 人事・組織／管理職">
+  <div class="s-head">
+    <div class="eyebrow"><span class="chip">07</span><span class="label">People &amp; Managers</span></div>
+    <h1 class="s-title">人事・組織／管理職</h1>
+  </div>
+  <div class="s-body">
+    <div class="split">
+      <div class="prompt-set">
+        <span class="chip">1. サーベイ自由記述の分析 ─ カテゴリを先に決めない</span>
+        <div class="prompt prompt-lean prompt-dense">#手順
+1. 回答を読み、内容に基づいてカテゴリを抽出する
+   （カテゴリは事前に指定せず、記述から立ち上げる）
+2. 各カテゴリの件数を集計し、要旨を示す（原文を引用せず、
+   複数人に共通する内容を言い換えて記述）
+3. 件数が2件以下は「少数意見」として別枠に全件列挙する
+   （要約や統合をしない）
+4. 「深刻度（高中低）×件数」で整理
+5. この分析からは判断できない事項を列挙
+
+#制約事項
+- 原文に書かれていない原因・背景を推測しない
+- 個人が特定される記述は要旨に含めない
+- ハラスメント・差別・違法行為・安全上の危険を示唆する
+  記述は集計に混ぜず、件数のみ冒頭に出し、内容は
+  記載せず規定の窓口へ連携が必要と明記する</div>
+      </div>
+      <div class="stack-4">
+        <div class="prompt-set">
+          <span class="chip">2. 1on1の論点整理 ─ 評価はさせない</span>
+          <div class="prompt prompt-lean prompt-dense">あなたは1on1の準備を支援するアシスタントです。
+評価や人事判断は行いません。
+
+#出力指示
+1. 前回からの差分（進んだ／止まっている／新しく出た）
+2. 前回合意したアクションの状況と、障害
+3. 今回話すべき論点（3つまで。優先順と理由）
+4. 論点ごとの問いかけ案（各2つ。詰問にならない言い回し）
+5. 今回は扱わないほうがよい話題と、その理由
+
+#制約事項
+- 本人の記述に無い内容を推測で補わない
+- 性格・資質・適性を評価しない。行動と成果物に限定
+- 論点は「本人が次の2週間で動かせるもの」に絞る</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footline">People &amp; Managers</div><div class="pageno">07 / 10</div>
+</section>
+
+<!-- 08 バックオフィス -->
+<section class="slide" data-title="08 バックオフィス（総務・法務・経理）">
+  <div class="s-head">
+    <div class="eyebrow"><span class="chip">08</span><span class="label">Back Office</span></div>
+    <h1 class="s-title">バックオフィス（総務・法務・経理）</h1>
+  </div>
+  <div class="s-body">
+    <div class="split">
+      <div class="prompt-set">
+        <span class="chip">1. 参照資料限定Q&amp;A ─ 嘘をつかせたくない場面の基本形</span>
+        <div class="prompt prompt-lean prompt-dense">#命令
+以下の「参照資料」のみに基づいて、私の質問に回答して
+ください。
+
+#参照資料
+{{規程・ガイドライン・仕様書を貼る}}
+
+#回答の絶対ルール
+- 参照資料に書かれている内容のみを根拠とすること。
+  一般常識・他社事例・推測で補わないこと
+- 回答には必ず、根拠となる箇所を原文のまま引用すること
+- 記載が無い場合は「参照資料に記載なし」とだけ回答する
+- 記述が曖昧または矛盾している場合は指摘し、どう解釈
+  しうるかを両論併記する
+
+#出力形式
+【回答】結論を2文以内
+【根拠】資料からの引用（「」で囲む）
+【備考】解釈の余地・確認が必要な点。無ければ「なし」</div>
+      </div>
+      <div class="stack-4">
+        <div class="prompt-set">
+          <span class="chip">2. リライト・添削 ─ 必ず2ターンに分ける</span>
+          <div class="prompt prompt-lean prompt-dense">【ターン1｜指摘のみ】
+以下の文書をレビューし、修正はせずに問題点だけを
+列挙してください。読み手は{{ }}、目的は{{ }}。
+出力は4列の表のみ：No / 該当箇所（原文引用）/
+問題の種類 / 修正方針
+種類は「事実の不明瞭さ／論理の飛躍／冗長／語調の
+不一致／体裁」で分類。重要度順、最大10件。
+
+【ターン2｜採用分のみ反映】
+上記のうち No.{{ }} のみを反映して全文書き直して。
+指摘していない箇所は原文のまま。元の主張・結論を
+変えない。数値・固有名詞・日付は一切変更しない。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footline">Back Office</div><div class="pageno">08 / 10</div>
+</section>
+
+<!-- 09 早見表 -->
+<section class="slide" data-title="09 やりたいこと別 早見表">
+  <div class="s-head">
+    <div class="eyebrow"><span class="chip">09</span><span class="label">Quick Reference</span></div>
+    <h1 class="s-title">やりたいこと別 早見表</h1>
+  </div>
+  <div class="s-body">
+    <div class="cols-2" style="gap:var(--s-6)">
+      <table class="t-compact">
+        <thead><tr><th>やりたいこと</th><th style="width:160px">使う型</th></tr></thead>
+        <tbody>
+          <tr><td>何から書けばいいか分からない</td><td>情報整理 → 骨格（02）</td></tr>
+          <tr><td>既にある文書を直す</td><td>リライト2段（08）</td></tr>
+          <tr><td>メモを文書にする</td><td>議事録／定型帳票</td></tr>
+          <tr><td>メールを書く</td><td>国内／海外（設計→英訳）</td></tr>
+          <tr><td>契約書・規程の叩き台</td><td>NDAドラフト</td></tr>
+          <tr><td>話し言葉・応対の台本</td><td>トークスクリプト（分岐つき）</td></tr>
+          <tr><td>案を出す</td><td>発散→収束 → ネーミング → 広告文</td></tr>
+        </tbody>
+      </table>
+      <table class="t-compact">
+        <thead><tr><th>やりたいこと</th><th style="width:160px">使う型</th></tr></thead>
+        <tbody>
+          <tr><td>同じ作業を量産する</td><td>変数プロンプト／コマンド搭載</td></tr>
+          <tr><td>入力で処理を変える</td><td>条件分岐プロンプト</td></tr>
+          <tr><td>指示の書き方が分からない</td><td>メタプロンプティング</td></tr>
+          <tr><td>文体を真似させたい</td><td>Few-shot（見本を1つ渡す）</td></tr>
+          <tr><td><strong>嘘をつかせたくない</strong></td><td><strong>参照資料限定Q&amp;A（08）</strong></td></tr>
+          <tr><td>同じ指示を毎回書いている</td><td>カスタムAI（GPTs / Gem）にする</td></tr>
+          <tr><td>出てきた内容を検証したい</td><td>ファクトチェック（05）</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="bubble bubble-tight push">
+      <p class="body-note">
+        迷ったら<strong>「嘘をつかせたくない」から選ぶ</strong>。社内規程・仕様書・契約書に関わる質問は、まず 08 の参照資料限定Q&amp;A に載せてから始めてください。
+      </p>
+    </div>
+  </div>
+  <div class="footline">Quick Reference</div><div class="pageno">09 / 10</div>
+</section>
+
+<!-- 10 契約で消えるリスクと、消えないリスク -->
+<section class="slide" data-title="10 契約で消えるリスクと、消えないリスク">
+  <div class="s-head">
+    <div class="eyebrow"><span class="chip">10</span><span class="label">What remains</span></div>
+    <h1 class="s-title">契約で消えるリスクと、消えないリスク</h1>
+  </div>
+  <div class="s-body">
+    <table class="t-compact">
+      <thead><tr><th style="width:165px">場面</th><th style="width:27%">法人契約で下がるリスク</th><th>それでも人がやること</th></tr></thead>
+      <tbody>
+        <tr><td class="table-lead">履歴書・職務経歴書</td><td>学習利用と外部流出は契約で対処済み</td><td>評価に不要な属性は除去する。理由は漏えいではなく<strong>公正な選考</strong>。本籍・家族・傷病等は、人が読む場合も把握してはならない事項（06）</td></tr>
+        <tr><td class="table-lead">書類選考・面接評価</td><td>契約とは無関係</td><td>判定をそのまま合否に使わない。氏名だけ変えた同一経歴で出力が変わらないかを定期確認する（06）</td></tr>
+        <tr><td class="table-lead">1on1・面談</td><td>保存先は契約テナント内</td><td>生の会話記録は本人の同意を取る。健康・家庭事情は入力しない。漏えいではなく<strong>目的外利用</strong>の問題（07）</td></tr>
+        <tr><td class="table-lead">サーベイ自由記述</td><td>契約とは無関係</td><td>ハラスメント・違法行為・自傷の示唆は集計に混ぜず、規定の窓口へ即エスカレーション（07）</td></tr>
+        <tr><td class="table-lead">参照する情報の範囲</td><td>権限に基づく参照は道具側が担保</td><td><strong>貼る側の道具には何でも持ち込めます。</strong>閲覧権限のない資料を、自分で持ち込まない</td></tr>
+        <tr><td class="table-lead">調査・市場データ</td><td>契約とは無関係</td><td>統計名や数値の捏造は契約では防げない。別セッションでファクトチェックし、一次情報に当たる（05）</td></tr>
+      </tbody>
+    </table>
+    <div class="bubble bubble-tight push">
+      <p class="body-note">
+        法人契約で消えるのは<strong>漏えい</strong>のリスクだけです。<strong>誤った判断</strong>と<strong>目的外利用</strong>は消えません。会話ログは管理者が閲覧・エクスポートできるため、人事・法務の機微情報は閲覧範囲を確認してから入れてください。
+      </p>
+    </div>
+  </div>
+  <div class="footline">What remains</div><div class="pageno">10 / 10</div>
+</section>
+
+</div>
+
+<nav class="bar">
+  <button type="button" id="prev">&larr; 前</button>
+  <button type="button" id="next">次 &rarr;</button>
+  <span class="count"><span id="cur">1</span> / <span id="tot">10</span></span>
+  <select id="jump" aria-label="ページを選ぶ"></select>
+  <span class="hint">&larr; &rarr; / Space</span>
+</nav>
+
+<script>
+(function () {
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var stage = document.getElementById('stage');
+  var bar = document.querySelector('.bar');
+  var cur = document.getElementById('cur');
+  var tot = document.getElementById('tot');
+  var jump = document.getElementById('jump');
+  var i = 0;
+
+  tot.textContent = String(slides.length);
+
+  slides.forEach(function (s, n) {
+    var o = document.createElement('option');
+    o.value = String(n);
+    var no = String(n + 1);
+    while (no.length < 2) { no = '0' + no; }
+    o.textContent = no + '  ' + (s.getAttribute('data-title') || '');
+    jump.appendChild(o);
+  });
+
+  function fit() {
+    var barH = bar.offsetHeight;
+    var k = Math.min((window.innerWidth - 32) / 1280, (window.innerHeight - barH - 32) / 720);
+    document.documentElement.style.setProperty('--k', String(Math.max(k, 0.1)));
+    stage.style.bottom = barH + 'px';
+  }
+
+  function show(n) {
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach(function (s, m) { s.hidden = (m !== i); });
+    cur.textContent = String(i + 1);
+    jump.value = String(i);
+  }
+
+  document.getElementById('prev').addEventListener('click', function () { show(i - 1); });
+  document.getElementById('next').addEventListener('click', function () { show(i + 1); });
+  jump.addEventListener('change', function () { show(Number(jump.value)); });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.target && e.target.tagName === 'SELECT') { return; }
+    if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); show(i + 1); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); show(i - 1); }
+    else if (e.key === 'Home') { show(0); }
+    else if (e.key === 'End') { show(slides.length - 1); }
+  });
+
+  window.addEventListener('resize', fit);
+  fit();
+  show(0);
+})();
+</script>
+</body>
+</html>
